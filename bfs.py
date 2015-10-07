@@ -2,7 +2,7 @@ def bfs(G): # depth in bfs forest
   seen, depth = {}, {}
   for v in G: 
     seen[v], depth[v] = False, 0
-  print 'bfs order       ',
+  print '\nbfs order       ',
   for v in sorted(G):
     if not seen[v]:
       explorebfs(G,v,seen,depth)
@@ -31,29 +31,19 @@ def show(G):
     for j in G[v]: print j,
     print ''
 
-#G = {'A': ['F'],
-     #'B': ['C','D'],
-     #'C': ['B','E','H'],
-     #'D': ['B'],
-     #'E': ['C','G','H'],
-     #'F': ['A'],
-     #'G': ['E'],
-     #'H': ['C','E']}
-G = {
-'A':['H'],
-'B':['I','L'],
-'C':['E','I','J'],
-'D':['F'],
-'E':['C','G','I','J','L'],
-'F':['D','J'],
-'G':['E','L'],
-'H':['A','K','M'],
-'I':['B','C','E','L'],
-'J':['C','E','F'],
-'K':['H'],
-'L':['B','E','G','I'],
-'M':['H'],
-}
+G = { 'A':['H'],
+      'B':['I','L'],
+      'C':['E','I','J'],
+      'D':['F'],
+      'E':['C','G','I','J','L'],
+      'F':['D','J'],
+      'G':['E','L'],
+      'H':['A','K','M'],
+      'I':['B','C','E','L'],
+      'J':['C','E','F'],
+      'K':['H'],
+      'L':['B','E','G','I'],
+      'M':['H'] }
 
 show(G)
 bfs(G)
