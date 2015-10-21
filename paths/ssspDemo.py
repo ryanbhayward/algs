@@ -32,14 +32,13 @@ def sssp(G,start):
 
   doneEarly = False
   while len(fringe)>0 and not doneEarly:
+    showFringe(G,fringe,dist,infinity)
     ndxMin = 0
     for j in range(1,len(fringe)):
       if dist[fringe[j]] < dist[fringe[ndxMin]]: ndxMin = j
-    u = fringe[ndxMin]
-    showFringe(G,fringe,dist,infinity)
+    u = fringe.pop(ndxMin)
     print '\npick',u,':',
-    fringe.pop(ndxMin)
-    if (dist[u] == infinity):  doneEarly = True
+    if (dist[u] == infinity): doneEarly = True
     for (v,duv) in G[u]:
       if dist[v] > dist[u] + duv: 
         dist[v] = dist[u] + duv
@@ -54,11 +53,12 @@ G = {'A': [['B',4],['C',2]],
      'D': [],
      'E': [['D',1]]}
 G2 = {'A': [['B',8],['C',8],['D',9],['E',13],['F',4],['G',11]],
-     'B': [['A',8],['C',0],['D',9],['E',12],['F',1],['G',18]],
-     'C': [['A',8],['B',0],['D',3],['E', 7],['F',15],['G', 6]],
-     'D': [['A',9],['B',9],['C',3],['E', 1],['F',13],['G', 9]],
-     'E': [['A',13],['B',12],['C',7],['D',1],['F',18],['G', 6]],
-     'F': [['A',4],['B',1],['C',15],['D',13],['F',18],['G', 5]],
-     'G': [['A',11],['B',18],['C',6],['D',9],['F',6],['G', 5]]}
-G3 = {'A': []}
+      'B': [['A',8],['C',0],['D',9],['E',12],['F',1],['G',18]],
+      'C': [['A',8],['B',0],['D',3],['E', 7],['F',15],['G', 6]],
+      'D': [['A',9],['B',9],['C',3],['E', 1],['F',13],['G', 9]],
+      'E': [['A',13],['B',12],['C',7],['D',1],['F',18],['G', 6]],
+      'F': [['A',4],['B',1],['C',15],['D',13],['F',18],['G', 5]],
+      'G': [['A',11],['B',18],['C',6],['D',9],['F',6],['G', 5]]}
+G3 = {'A': [],
+      'B': [['A',1]]}
 sssp(G,'A')
