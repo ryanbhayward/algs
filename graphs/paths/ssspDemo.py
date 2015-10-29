@@ -40,7 +40,7 @@ def sssp(G,start):
     print '\npick',u,':',
     if (dist[u] == infinity): doneEarly = True
     for (v,duv) in G[u]:
-      if dist[v] > dist[u] + duv: 
+      if (v in fringe) and (dist[v] > dist[u] + duv): 
         dist[v] = dist[u] + duv
         parent[v] = u
         print v,dist[v],' ',

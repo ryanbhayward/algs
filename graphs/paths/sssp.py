@@ -14,7 +14,7 @@ def sssp(G,source):
         indexOfMin = j
     u = fringe.pop(indexOfMin)
     for (v,duv) in G[u]:
-      if dist[v] > dist[u] + duv: 
+      if (v in fringe) and (dist[v] > dist[u] + duv): 
         dist[v] = dist[u] + duv
         parent[v] = u
         print 'to',v,'now',dist[v],'via',u
