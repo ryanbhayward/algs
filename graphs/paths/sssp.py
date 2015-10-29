@@ -1,5 +1,12 @@
 # simple Dijkstra 
 def infinity(): return 999
+
+def indexOfMin(L,C):
+  ndx = 0
+  for j in range(1,len(L)):
+    if C[L[j]] < C[L[ndx]]: ndx = j
+  return ndx
+
 def sssp(G,source):
   dist, parent, fringe = {}, {}, []
   for v in G:
@@ -8,11 +15,7 @@ def sssp(G,source):
   dist[source],parent[source] = 0, source
 
   while len(fringe)>0:
-    indexOfMin = 0
-    for j in range(1,len(fringe)):
-      if dist[fringe[j]] < dist[fringe[indexOfMin]]: 
-        indexOfMin = j
-    u = fringe.pop(indexOfMin)
+    u = fringe.pop(indexOfMin(fringe,dist))
     for (v,duv) in G[u]:
       if (v in fringe) and (dist[v] > dist[u] + duv): 
         dist[v] = dist[u] + duv

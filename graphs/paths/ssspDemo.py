@@ -22,6 +22,12 @@ def showFringe(G,F,D,inf):
     if D[v]!=inf: 
       print v,D[v],' ',
 
+def indexOfMin(L,C):
+  ndx = 0
+  for j in range(1,len(L)):
+    if C[L[j]] < C[L[ndx]]: ndx = j
+  return ndx
+
 def sssp(G,start):
   infinity = 999 + weightSum(G)
   dist, parent, fringe = {}, {}, []
@@ -33,10 +39,7 @@ def sssp(G,start):
   doneEarly = False
   while len(fringe)>0 and not doneEarly:
     showFringe(G,fringe,dist,infinity)
-    ndxMin = 0
-    for j in range(1,len(fringe)):
-      if dist[fringe[j]] < dist[fringe[ndxMin]]: ndxMin = j
-    u = fringe.pop(ndxMin)
+    u = fringe.pop(indexOfMin(fringe,dist))
     print '\npick',u,':',
     if (dist[u] == infinity): doneEarly = True
     for (v,duv) in G[u]:
