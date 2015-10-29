@@ -7,8 +7,7 @@ def weightSum(G):
     for (v,weight) in G[u]: sum += weight
   return sum
 
-def inf(G):
-  return 999+weightSum(G)
+def inf(G): return 999+weightSum(G)
 
 def showAll(G,D,P):
   print '\nprnt',
@@ -25,6 +24,12 @@ def showFringe(G,F,D,inf):
     if D[v]!=inf: 
       print v,D[v],' ',
 
+def indexOfMin(L,C):
+  ndx = 0
+  for j in range(1,len(L)):
+    if C[L[j]] < C[L[ndx]]: ndx = j
+  return ndx
+
 def primMst(G,start):
   infinity = inf(G)
   cost, parent, fringe = {}, {}, []
@@ -36,10 +41,7 @@ def primMst(G,start):
   doneEarly = False
   while len(fringe)>0 and not doneEarly:
     showFringe(G,fringe,cost,infinity)
-    ndxMin = 0 # find index of min cost fringe node
-    for j in range(1,len(fringe)):
-      if cost[fringe[j]] < cost[fringe[ndxMin]]: ndxMin = j
-    u = fringe.pop(ndxMin)
+    u = fringe.pop(indexOfMin(fringe,cost))
     print '\npick',u,':',
     if (cost[u] == infinity): doneEarly = True
     for (v,duv) in G[u]:
