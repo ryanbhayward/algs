@@ -8,6 +8,19 @@ def getStrings():
 A, B = getStrings()
 m, n = len(A), len(B)
 
+# track edit distance of prefixes
+# best alignment of A[1..i], B[1..j] ?
+#  A[1.. i ]   -
+#  B[1..j-1]  B[j]       
+#                        or
+#  A[1..i-1]  A[j]
+#  B[1.. j ]   -         
+#                        or
+#  A[1..i-1]  B[i]
+#  B[1..j-1]  A[j]
+#
+#  C[i][j]: best of above 3
+
 C = [[0 for y in range(n+1)] for x in range(m+1)]
 for r in range(m): C[r+1][0] = r+1
 for c in range(n): C[0][c+1] = c+1
