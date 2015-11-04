@@ -30,10 +30,10 @@ for r in range(m):
     if A[r] != B[c]: t+= 1
     C[r+1][c+1] = min(t, 1+C[r][c+1], 1+C[r+1][c])
 
-print '\n      ',
+print '\n     -',
 for c in range(len(B)): print B[c],
 print '\n'
-S = ' ' + A
+S = '-' + A
 for r in range(len(S)):
   print '',S[r],' ',
   for c in range(n+1):
