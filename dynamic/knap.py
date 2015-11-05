@@ -9,7 +9,7 @@ def showRows(a,b,K): # last b-a rows
   for w in range(a,b):
     print w, ; print K[w]
 
-def sack(n,W,K):  # get 0/1 solution vector
+def sack(n,W,K):  # given W, find 0/1 solution vector
   inSolution = [0 for j in xrange(n)]
   ndx,w  = n,W
   while (w>0) and (ndx>0):
@@ -32,7 +32,7 @@ def solveknapsack(val,wt,W):
   lastfew = 25   
   showRows(W+1-lastfew,W+1,K) # print last few rows of K
   solvec = sack(n,W,K)
-  print '\ncheck', sum(map(operator.mul, solvec, val)), solvec
+  print '\n', sum(map(operator.mul, solvec, val)), solvec
     
 n = 200
 W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
