@@ -22,7 +22,8 @@ def mincost(M): #matrix dimensions
       del vals[:]
   return C
 
-S = [5, 3, 7, 1, 6]
-C = mincost(S); print C
+S =  [5, 3, 7, 1, 6]
+S2 = [2, 4, 5, 1, 3]
+C = mincost(S2); print C
 #S = genseq(9); print S
 #C = mincost(S); print C
