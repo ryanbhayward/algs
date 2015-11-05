@@ -32,11 +32,11 @@ def solveknapsack(val,wt,W):
   lastfew = 25   
   showRows(W+1-lastfew,W+1,K) # print last few rows of K
   solvec = sack(n,W,K)
-  print sum(map(operator.mul, solvec, val)), solvec
+  print '\ncheck', sum(map(operator.mul, solvec, val)), solvec
     
-n = 10
-W = (n*n*3)/4
-val,wt = genvector(n),genvector(n)
+n = 200
+W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
 print 'val  ', ; print(val)
 print 'wt   ', ; print(wt)
+print 'max value knapsack with weight at most', W, '?'
 solveknapsack(val,wt,W)
