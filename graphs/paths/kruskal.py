@@ -1,5 +1,5 @@
 # simple Kruskal mst
-import weighted 
+import weighted, UF
 
 # convert from weighted adjacency list 
 #         to tuple list:   (v,w,wt_vw)
@@ -19,12 +19,6 @@ def extractmin(L):
       ndxMin, valMin = j, t[2]
   return L.pop(ndxMin)
 
-# root of component containing v
-def root(v,parent):
-  while parent[v] != v:
-    v = parent[v]
-  return v
-
 def kruskalDemo(G):
   L = createEdgeList(G)
   parent = {}
@@ -33,11 +27,11 @@ def kruskalDemo(G):
   while len(L) > 0:
     t = extractmin(L)
     a, b = t[0], t[1]
-    ra, rb = root(a,parent), root(b,parent)
+    ra, rb = UF.myfind(a,parent), UF.myfind(b,parent)
     print a, ra, b, rb,
     if ra != rb:
       print 'add edge',a,b,t[2]
-      parent[ra] = rb
+      UF.myunion(ra,rb,parent)
     else:
       print 'reject  ',a,b
 
