@@ -2,7 +2,6 @@ from randsat import formula
 # generate random uniform 2- or 3-sat formula
 # solve with simple backtracking
 
-# input/output
 # literals  x_1 ...  x_n represented by  1  2 ...  n
 # literals -x_1 ... -x_n represented by -1 -2 ... -n
 
@@ -48,8 +47,7 @@ def sat(f): return (True if len(f)==0 else False)
 def unsat(a): return (True if a[0]==UNSAT else False)
 
 def backsat(f,a):
-  if unsat(a): return f,a
-  if   sat(f): return f,a
+  if unsat(a) or sat(f): return f,a
   minj = f.index(min(f,key=len))  # clause with fewest literals
   if len(f[minj])==0:
     a[0] = UNSAT
@@ -60,14 +58,13 @@ def backsat(f,a):
   #split: 2 possible bool. vals for literal f[minj][0]
   #print "split A:", f[minj][0]
   fcopy, acopy = mycopy(f,a)
-  fixliteral(f[minj][0], f, a)
+  fixliteral(f[minj][0], f, a)  # f[minj][0] True
   f,a = backsat(f,a)
   if sat(f): return f, a
   f,a = fcopy, acopy
   #print "split B:", -f[minj][0]
-  fixliteral(-f[minj][0], f, a)
+  fixliteral(-f[minj][0], f, a) # f[minj][0] False
   return backsat(f, a)
-
 
 #myf=[[-5,-6],[-3,5],[-2,5],[1,-6],[1,-4],[1,-3],[2,3],[2,6],[3,-5],[3,4],[4,-5],[5,-6]]
 #myf=[[-4,-5,6],[-4,5,-6],[-2,4,-5],[-2,5,-6],[-1,-3,-4],[-1,-3,4],[-1,4,-6],[1,-4,5],[1,-3,-5],[1,-3,4],[1,5,-6],[2,5,6],[3,-5,-6],[4,-5,6],[4,5,-6],[4,5,6]]
