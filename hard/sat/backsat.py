@@ -8,17 +8,16 @@ from randsat import formula
 
 # assignment vector: one entry for each variable
 # set a[0] to UNSAT if formula unsatisfiable
-UNSAT, UNKNOWN,  FALSE, TRUE = -2, -1, 0, 1
-
-def emptyAsnmt(n):
-  a = [UNKNOWN]*n
-  return a
+UNSAT, UNKNOWN, FALSE, TRUE = -2, -1, 0, 1
 
 def showf(f): 
   for j in f: print j
-  
+
 def showfa(f,a):
-  for x in a: print x,
+  for x in a: 
+    if x==UNSAT: print '*',
+    elif x==UNKNOWN: print '?',
+    else: print x,
   print ''
   showf(f)
 
@@ -53,7 +52,7 @@ def backsat(f,a):
   if   sat(f): return f,a
   minj = f.index(min(f,key=len))  # clause with fewest literals
   if len(f[minj])==0:
-    a[0]= UNSAT
+    a[0] = UNSAT
     return f,a
   if len(f[minj])==1: 
     fixliteral(f[minj][0], f, a)
@@ -78,6 +77,6 @@ myf = formula(n,3,m)
 print "\nrandom formula",n,"vars",m,"clauses"
 showf(myf)
 print ''
-asn = emptyAsnmt(n)
+asn = [UNKNOWN]*n
 f,a = backsat(myf,asn)
 showfa(f,a)
