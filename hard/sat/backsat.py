@@ -1,4 +1,3 @@
-import copy
 from randsat import formula
 # generate random uniform 2- or 3-sat formula
 # solve with simple backtracking

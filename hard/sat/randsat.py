@@ -57,7 +57,3 @@ def show(f,pretty):
   for c in f:
     if pretty: prettyClause(c)
     else:       plainClause(c)
-
-#f = formula(6,3,25)
-#show(f,False)
-#show(f,True)
