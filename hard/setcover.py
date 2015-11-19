@@ -20,10 +20,21 @@ def gensubset(a,b,n): # subset of 0..n-1, each with prob a/b
     if randint(1,b) <= a: s.add(j)
   return s
 
+def complete(L,n): # ensure union of L covers {0 .. n-1}
+  u = set()
+  for s in L: u = u.union(s)
+  #print settostring(u,n)
+  for j in range(n):
+    if j not in u:
+      r = randint(0,len(L)-1)
+      L[r].add(j)
+      #print 'add',j,'to',r
+
 def initsubsets(n,m,a,b): # m subs of 0..n-1
   # an element in a subset with probability a/b
   L = [] # list of subsets
   for _ in range(m): L.append(gensubset(a,b,n))
+  complete(L,n)
   sumlen = 0
   for x in L:
     sumlen += len(x)
@@ -44,6 +55,7 @@ def bruteforce(n,m,L):
       for j in indexset: print settostring(L[j],n)
       return # so return once one is found
 
-n,m,a,b = 40,25,2,11
+#n,m,a,b = 40,25,2,11
+n,m,a,b = 20,11,1,5
 L = initsubsets(n,m,a,b)
 bruteforce(n,m,L)

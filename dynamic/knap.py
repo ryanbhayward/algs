@@ -55,9 +55,10 @@ def solveknapsack(val,wt,W):
   solvec = sack(n,W,K)
   print '\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val))
     
-#n = 25
-#W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
-n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
+n = 5
+W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
+#n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
+n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 9, 6]
 print 'val  ', ; print(val)
 print 'wt   ', ; print(wt)
 print 'max value knapsack with weight at most', W, '?'
