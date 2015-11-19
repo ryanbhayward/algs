@@ -5,8 +5,8 @@ from randsat import show, formula
 
 def clause_sat(clause,asnmt):
   for var in clause:
-    if ((var>0 and asnmt[var-1]==1) or 
-       (var<0 and asnmt[-(var+1)]==0)): 
+    if ((var>0 and asnmt[  var-1 ] == 1) or 
+        (var<0 and asnmt[-(var+1)] == 0)): 
       return True
   return False
 
@@ -27,5 +27,4 @@ m = len(myf)
 show(myf, False)
 allAsn = product([0,1],repeat=n)
 for a in allAsn:
-  if sat(myf,a): 
-    print 'satisfiable', a
+  if sat(myf,a): print 'satisfiable', a
