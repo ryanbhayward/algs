@@ -15,15 +15,14 @@ def sat(formula, asnmt):
     if not clause_sat(clause,asnmt): return False
   return True
 
-def emptyAsnmt(n):
-  a = [UNKNOWN]*n
-  return a
+def emptyAsnmt(n): return [UNKNOWN]*n
 
 #n, myf = 4, [[1,-2,3],[1,-2,-4],[1,2,3],[1,2,4],[-1,-2,-3],[-1,-2,3],[-1,2,4],[2,-3,-4],[2,3,-4]]
-#n, myf = 6, [[-4,-5,6],[-4,5,-6],[-2,4,-5],[-2,5,-6],[-1,-3,-4],[-1,-3,4],[-1,4,-6],[1,-4,5],[1,-3,-5],[1,-3,4],[1,5,-6],[2,5,6],[3,-5,-6],[4,-5,6],[4,5,-6],[4,5,6]]
-#m = len(myf)
-n, k, m = 20, 3, 90  #max m: (n choose k)(2^k)
-myf = formula(n,k,m)
+n, myf = 6, [[-4,-5,6],[-4,5,-6],[-2,4,-5],[-2,5,-6],[-1,-3,-4],[-1,-3,4],[-1,4,-6],[1,-4,5],[1,-3,-5],[1,-3,4],[1,5,-6],[2,5,6],[3,-5,-6],[4,-5,6],[4,5,-6],[4,5,6]]
+m = len(myf)
+
+#n, k, m = 20, 3, 90  #max m: (n choose k)(2^k)
+#myf = formula(n,k,m)
 
 show(myf, False)
 allAsn = product([0,1],repeat=n)
