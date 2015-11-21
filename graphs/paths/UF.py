@@ -30,15 +30,15 @@ def unionBR(v,w,P,R): # union by rank
     P[rv] = rw
     R[rw] += 1
 
-n = 16
-P = []
-for j in range(n):
-  P.append(j)
+#n = 16
+#P = []
+#for j in range(n):
+  #P.append(j)
 
-print P
-t = 2
-while t <= n:
-  print t
-  for j in range(n/t):
-    myunion(t*j, t*j+t/2,P) ; print P
-  t *= 2
+#print P
+#t = 2
+#while t <= n:
+  #print t
+  #for j in range(n/t):
+    #myunion(t*j, t*j+t/2,P) ; print P
+  #t *= 2
