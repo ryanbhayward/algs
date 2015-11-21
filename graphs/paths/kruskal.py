@@ -28,11 +28,11 @@ def kruskalDemo(G):
     t = extractmin(L)
     a, b = t[0], t[1]
     ra, rb = UF.myfind(a,parent), UF.myfind(b,parent)
-    print a, ra, b, rb,
+    #print a, ra, b, rb,
     if ra != rb:
-      print 'add edge',a,b,t[2]
+      #print 'add edge',a,b,t[2]
+      print a,b,t[2]
       UF.myunion(ra,rb,parent)
-    else:
-      print 'reject  ',a,b
+    #else: print 'reject  ',a,b
 
-kruskalDemo(weighted.G4)
+kruskalDemo(weighted.G6)
