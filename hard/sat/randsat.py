@@ -7,6 +7,7 @@ from random import randint
 def litToInt(lit):
   if lit>0: return 2*lit-2
   return 2*(-lit)-1
+
 def intToLit(n):
   if 0==n%2: return 1+n/2
   return          -(1+n/2)

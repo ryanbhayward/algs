@@ -1,7 +1,6 @@
 from randsat import formula
-# generate random uniform 2- or 3-sat formula
-# solve with simple backtracking
-
+from bfsat import bfsolve
+from copy import deepcopy
 # literals  x_1 ...  x_n represented by  1  2 ...  n
 # literals -x_1 ... -x_n represented by -1 -2 ... -n
 
@@ -66,14 +65,21 @@ def backsat(f,a):
   fixliteral(-f[minj][0], f, a) # f[minj][0] False
   return backsat(f, a)
 
-#myf=[[-5,-6],[-3,5],[-2,5],[1,-6],[1,-4],[1,-3],[2,3],[2,6],[3,-5],[3,4],[4,-5],[5,-6]]
-#myf=[[-4,-5,6],[-4,5,-6],[-2,4,-5],[-2,5,-6],[-1,-3,-4],[-1,-3,4],[-1,4,-6],[1,-4,5],[1,-3,-5],[1,-3,4],[1,5,-6],[2,5,6],[3,-5,-6],[4,-5,6],[4,5,-6],[4,5,6]]
+def backsolve(n,myf):
+  asn = [UNKNOWN]*n
+  f,a = backsat(myf,asn)
+  showfa(f,a)
 
-n,m = 20,90  #max m is n choose k times 2^k, where k=2or3
-myf = formula(n,3,m)
-print "\nrandom formula",n,"vars",m,"clauses"
-showf(myf)
-print ''
-asn = [UNKNOWN]*n
-f,a = backsat(myf,asn)
-showfa(f,a)
+#n,myf=6,[[-5,-6],[-3,5],[-2,5],[1,-6],[1,-4],[1,-3],[2,3],[2,6],[3,-5],[3,4],[4,-5],[5,-6]]
+#n,myf=6,[[-4,-5,6],[-4,5,-6],[-2,4,-5],[-2,5,-6],[-1,-3,-4],[-1,-3,4],[-1,4,-6],[1,-4,5],[1,-3,-5],[1,-3,4],[1,5,-6],[2,5,6],[3,-5,-6],[4,-5,6],[4,5,-6],[4,5,6]]
+
+#max m: (n choose k)(2^k)
+#n, k, m = 20, 5, 400  # good example
+n, k, m = 30, 5, 600 # backtrack yes, bf too slow
+myf = formula(n,k,m)
+myf2 = deepcopy(myf)
+#print "\nrandom formula",n,"vars",m,"clauses"
+#showf(myf)
+#print ''
+backsolve(n,myf)
+bfsolve(n,myf2,TRUE)
