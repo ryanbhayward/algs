@@ -16,7 +16,7 @@ def odd_collatz(n):
       n = n * 3 + 1
   print n
 
-for j in range(12):
-  print ""
-  collatz(2*j+1)
-  odd_collatz(2*j+1)
+for j in range(10):
+  collatz(j+1)
+  #collatz(2*j+1)
+  #odd_collatz(2*j+1)
