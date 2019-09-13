@@ -1,4 +1,4 @@
-
+#!/usr/bin/python
 import time
 # three versions of fibonacci function
 
@@ -42,21 +42,25 @@ def fib_demo(bign):
     t0, t1  = t1, time.time()-now
     print j, fj, t1, "sec, ratio current/prev", t1/t0
 
-def mfib_demo(bign):
+def mfib_demo(c):
   print "\n ********** mfib demo\n"
-  t1 = 1.0
-  for j in range(bign):
-    print mfib(j)
-
-def ifib_demo(x):
-  print "\n ********* ifib demo\n"
-  for _ in range(6):
-    now = time.time()
-    fx = ifib(x)
-    print x, time.time() - now, "sec"
+  x, t1 = 1, 1.0
+  for j in range(c+1):
+    now, fx = time.time(), mfib(x)
+    t0, t1  = t1, time.time()-now
+    print j, x, t1, "s. rat. cur./prev", t1/t0
     x *= 2
 
-fib_test(30)
-fib_demo(35)
-mfib_demo(35)
-ifib_demo(40000)
+def ifib_demo(c):
+  print "\n ********* ifib demo\n"
+  x, t1 = 1, 1.0
+  for j in range(c+1):
+    now, fx = time.time(), ifib(x)
+    t0, t1  = t1, time.time()-now
+    print j, x, t1, "s. rat. cur./prev", t1/t0
+    x *= 2
+
+#fib_test(30)
+#fib_demo(35)
+mfib_demo(9)
+#ifib_demo(20)
