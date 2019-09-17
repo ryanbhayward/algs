@@ -23,6 +23,6 @@ def sssp(G,source):
   print '\nparent   ',
   for v in sorted(G): print parent[v],
 
-G = weighted.G5
+G = weighted.G7
 print G
 sssp(G,'A')
