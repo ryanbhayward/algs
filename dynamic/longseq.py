@@ -1,6 +1,6 @@
 import random  # longest increasing subsequence
 
-def pretty(S):
+def pretty(S): # print vector, uniform field width
   print "[",
   for j in S:
     print '%2d' % j, 
@@ -23,13 +23,14 @@ def longest(S):
     # invariant: for t in {0 ... k-1}, L[t] = f(t)
     sofar = 0  
     for j in range(k):
+      # sofar = max{ all i in {0 .. j-1} with S[i] < S[k]: f(i) }
       if S[j]<S[k]: sofar = max(sofar,L[j])
-    # sofar = max { over all j in {0 .. k-1} with S[j] < S[k]: f(j) }
+    # sofar = max { all j in {0 .. k-1} with S[j] < S[k]: f(j) }
     L.append(1+sofar)
     pretty(L)
     # L[k] = f(k)
-  return L
   # for n = len(S), for all t in {0 ... n-1}: L[t] = f(t) 
+  return L
 
 #S = [7,10,6,2,4,8,9,3,2,7,9,1]
 #S = [1,9,7,2,3,9,8,4,2,6,10,7]
