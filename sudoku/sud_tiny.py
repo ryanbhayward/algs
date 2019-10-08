@@ -50,10 +50,9 @@ def parse_grid(grid):
     """Convert grid to a dict of possible values, {square: digits}, or
     return False if a contradiction is detected."""
     ## To start, every square can be any digit; then assign values from the grid.
-    print("parse_grid")
     values = dict((s, digits) for s in squares)
     for s,d in grid_values(grid).items():
-        print("s, d", s, d)
+        print("\ns, d", s, d)
         if d in digits and not assign(values, s, d):
             return False ## (Fail if we can't assign d to square s.)
     return values
@@ -70,9 +69,10 @@ def grid_values(grid):
 def assign(values, s, d):
     """Eliminate all the other values (except d) from values[s] and propagate.
     Return values, except return False if a contradiction is detected."""
+    print("  assign", d, "to cell",s," *** start")
     other_values = values[s].replace(d, '')
     if all(eliminate(values, s, d2) for d2 in other_values):
-        print("  assign ", d, " to cell ",s)
+        print("  assign", d, "to cell",s," *** done")
         return values
     else:
         return False
@@ -80,7 +80,7 @@ def assign(values, s, d):
 def eliminate(values, s, d):
     """Eliminate d from values[s]; propagate when values or places <= 2.
     Return values, except return False if a contradiction is detected."""
-    print("    start call: eliminate", d, "from", s)
+    print("    eliminate", d, "from", s, "start")
     if d not in values[s]:
         return values ## Already eliminated
     values[s] = values[s].replace(d,'')
@@ -100,7 +100,7 @@ def eliminate(values, s, d):
             # d can only be in one place in unit; assign it there
             if not assign(values, dplaces[0], d):
                 return False
-    print("    end of call: eliminate", d, "from", s)
+    print("    eliminate", d, "from", s, "finish")
     display(values)
     return values
 
@@ -128,6 +128,7 @@ def search(values):
     if all(len(values[s]) == 1 for s in squares):
         return values ## Solved!
     ## Chose the unfilled square s with the fewest possibilities
+    print("\nsearch\n")
     n,s = min((len(values[s]), s) for s in squares if len(values[s]) > 1)
     for d in values[s]:
         result = search(assign(values.copy(), s, d))
@@ -157,10 +158,14 @@ def solved(values):
     return values is not False and all(unitsolved(unit) for unit in unitlist)
 
 
-grid1  = '12..34212.......'
+#grid1  = '21..3.121.......'
+#grid1  = '21..43121.......'
+grid1  = '4.....2...4...1.'
+#grid1  = '1.....2.......4.'
 
-test()
-display(parse_grid(grid1))
+#test()
+#display(parse_grid(grid1))
+display(solve(grid1))
     
 #if __name__ == '__main__':
     #test()
