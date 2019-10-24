@@ -38,24 +38,27 @@ def knapBF(val,wt,W): # brute force knapsack
   bestVal = 0
   print 'subset    wt val   max wt',W
   for indexset in powerset(indices):
-    v, w = 0, 0
-    for t in indexset: 
-      v+= val[t]
-      w+= wt[t]
+    v = sum( val[t] for t in indexset )
+    w = sum(  wt[t] for t in indexset )
     if w <= W and v > bestVal: 
       bestVal = v
       print indexset, w,v
 
 def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
-#warning: need an extra 0th column, so shift indexing:
-#val[t],wt[t] corresponds to K[][t+1]
+# K[w][j]  will be best value knapsack, weight at most w, 
+#         using subset of { item_1, item_2, ..., item_j }
+# warning: K[][] needs an extra 0th column, so its indices
+#   are off-by-one w.r.t. val[], wt[]
+# eg. val[v], wt[t]  refer to t+1'st item
+#     also K[][t+1]  refers to t+1'st item
+#
   n = len(val)
   K = [[0 for j in xrange(n+1)] for w in xrange(W+1)]
   for j in range(1,n+1):
     for w in range(W+1):
       if wt[j-1]>w: K[w][j] = K[w][j-1]
       else: K[w][j] = max(K[w][j-1], K[w-wt[j-1]][j-1]+val[j-1])
-  lastfew = 30
+  lastfew = 30  # show last few rows of computation
   showRows(max(W+1-lastfew,0),W+1,K,1+sum(wt)) # print last few rows of K
   solvec = sack(n,W,K)
   print '\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val)),'\n'
