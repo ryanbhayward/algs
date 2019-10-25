@@ -56,8 +56,8 @@ def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
   K = [[0 for j in xrange(n+1)] for w in xrange(W+1)]
   for j in range(1,n+1):
     for w in range(W+1):
-      if wt[j-1]>w: K[w][j] = K[w][j-1]
-      else: K[w][j] = max(K[w][j-1], K[w-wt[j-1]][j-1]+val[j-1])
+      K[w][j] = K[w][j-1] if w < wt[j-1] \
+        else max(K[w][j-1], K[w-wt[j-1]][j-1] + val[j-1])
   lastfew = 30  # show last few rows of computation
   showRows(max(W+1-lastfew,0),W+1,K,1+sum(wt)) # print last few rows of K
   solvec = sack(n,W,K)
@@ -72,16 +72,17 @@ def knapDPV(val,wt,V): #dynamic programming by value
   A[val[0]][0] = wt[0]  # end initialization
   for v in range(1,V+1):  # row    0 already initialized
     for j in range(1,n):  # column 0 "       "
-      new, subv = A[v][j-1], v-val[j]
-      if subv >= 0: new = min(new, A[subv][j-1] + wt[j])
-      A[v][j] = new
+      A[v][j] = A[v][j-1] if v < val[j] \
+        else min(A[v][j-1], A[v - val[j]][j-1] + wt[j])
   showRows(0,len(A),A,infinity)
 
 n = 8
 W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
 #n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
 #n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 8, 5]
+#n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
+n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
 knapBF(val,wt,W)
 knapDP(val,wt,W)
 knapDPV(val,wt,sum(val))
-print 'val', val; print 'wt ', wt
+print 'val', val; print 'wt ', wt; print 'W ', W
