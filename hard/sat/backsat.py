@@ -75,14 +75,15 @@ def backsolve(n,myf):
 
 #max m: (n choose k)(2^k)
 #n, k, m = 20, 5, 400  # good example
-n, k, m = 30, 5, 600 # backtrack yes, bf too slow
+#n, k, m = 30, 5, 100 # backtrack yes, bf too slow
+n, k, m = 10, 3, 48  # good example
 
 myf = formula(n,k,m)
-n,myf = 5, [[1,-5],[-2,-3],[3,4],[-4,-5],[2,5],[-1,-5]]
-n,myf = 5, [[1,-2],[1,3],[-2,-3],[2,4],[-3,-4],[3,-5],[3,5]]
+#n,myf = 5, [[1,-5],[-2,-3],[3,4],[-4,-5],[2,5],[-1,-5]]
+#n,myf = 5, [[1,-2],[1,3],[-2,-3],[2,4],[-3,-4],[3,-5],[3,5]]
 myf2 = deepcopy(myf)
-#print "\nrandom formula",n,"vars",m,"clauses"
-#showf(myf)
-#print ''
+print "\nrandom formula",n,"vars",m,"clauses"
+showf(myf)
+print ''
 backsolve(n,myf)
 bfsolve(n,myf2,TRUE)
