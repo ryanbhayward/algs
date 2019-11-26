@@ -29,7 +29,8 @@ def subsetsum(S, t): #brute force subset sum
     indices = range(len(S)) # [0 1 .. n-1]
     for indexset in powerset(indices):
         s = sum(S[t] for t in indexset)
-        if round(.99*t) <= s and round(1.01*t) >= s:
+        #if round(.999*t) <= s and round(1.001*t) >= s:
+        if s == t:
             print(indexset, s, t, end = ' ')
             print('bingo' if s==t else '')
 
@@ -39,7 +40,8 @@ def ss2(S, t): # iterative merging
         M = []
         for x in L:
             if x+p == t: 
-                print(L, 'yes')
+                #print(L)
+                print('yes')
                 return
             if x+p < t and x+p not in Lset:
                 M.append(x+p)
@@ -47,7 +49,7 @@ def ss2(S, t): # iterative merging
         L += M
     print('no')
 
-n = 6
+n = 12
 max_val = round(.95 * 2**n)
 S = gensubset(n, max_val)
 #S = [1, 23, 38, 43, 46, 58]
@@ -56,3 +58,8 @@ print('set ', S, ' target ', t)
 subsetsum(S, t)
 print('')
 ss2(S,t)
+
+#set  [128941, 177712, 226421, 317169, 435389, 466313, 522297, 523615, 596412, 605529, 626802, 630249, 640644, 670557, 729843, 786586, 816311, 976756, 977042, 992235]  target  5923412
+#(4, 6, 7, 8, 9, 11, 12, 18, 19) 5923412 5923412 bingo
+#
+#yes
