@@ -9,10 +9,10 @@ def genvector(n):
 
 def showRows(a,b,K,inf): # rows a .. b-1
   for w in range(a,b): #inf printed as '-'
-    print '%3d'%w,
+    print '%4d'%w,
     for k in K[w]:
       if k==inf: print '  -',
-      else: print '%3d'%k,
+      else: print '%4d'%k,
     print ''
 
 def sack(n,W,K):  # given W, find 0/1 solution vector
@@ -81,8 +81,9 @@ W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
 #n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
 #n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 8, 5]
 #n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
-n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
+#n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
+n,W,val,wt = 4, 13, [6, 9, 8, 10], [5, 7, 6, 8]
 knapBF(val,wt,W)
 knapDP(val,wt,W)
-knapDPV(val,wt,sum(val))
+#knapDPV(val,wt,sum(val))
 print 'val', val; print 'wt ', wt; print 'W ', W

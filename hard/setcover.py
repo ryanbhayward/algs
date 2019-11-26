@@ -57,6 +57,7 @@ def bruteforce(n,m,L):
 
 #n,m,a,b = 40,25,2,11
 #n,m,a,b = 20,11,1,5
-n,m,a,b = 7,8,3,7
+n,m,a,b = 15,10,1,3
+#n,m,a,b = 7,8,3,7
 L = initsubsets(n,m,a,b)
 bruteforce(n,m,L)
