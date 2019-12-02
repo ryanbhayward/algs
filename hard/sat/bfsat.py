@@ -15,11 +15,12 @@ def sat(formula, asnmt):
     if not clause_sat(clause,asnmt): return False
   return True
 
-def bfsolve(n,myf,findAll): #try all assignments
+def bfsolve(n, myf, findAll): #try all assignments
   for a in product([0,1],repeat=n):
     if sat(myf,a): 
-      for v in a: print v,
-      print ''
+      for v in a: 
+        print(v, end='')
+      print('')
       if not findAll: return
 
   #below: fixed examples

@@ -5,12 +5,10 @@ from random import randint
 #   literals 1 -1 2 -2 ...  n  -n   represented by 
 #   integers 0  1 2  3 ... n-2 n-1
 def litToInt(lit):
-  if lit>0: return 2*lit-2
-  return 2*(-lit)-1
+  return 2*lit-2 if lit>0 else 2*(-lit)-1
 
 def intToLit(n):
-  if 0==n%2: return 1+n/2
-  return          -(1+n/2)
+  return 1+n//2 if 0==n%2 else -(1+n//2)
 
 def randclause(n,k): # n-var uniform random k-clause
 # floyd's alg, from Bentley's prog. pearls "A sample of brilliance"
@@ -45,16 +43,17 @@ def prettyClause(c):
   psn = -1
   for lit in c:
     psn, psnOld = litToInt(lit), psn
-    for j in range(psn-(psnOld+1)):  print '  ',
-    print '%2d' % lit,
-  print ''
+    for j in range(psn-(psnOld+1)):  
+      print('  ', end='')
+    print('{:>2}'.format(lit), end='')
+  print('')
 
 def plainClause(c):
-  print '[',  
-  for j in range(len(c)-1): print '%2d,' % c[j],
-  print '%2d]' % c[len(c)-1]
+  print('[', end='')
+  for j in range(len(c)-1): 
+    print('{:>2}'.format(c[j]), end='')
+  print('{:>2}'.format(c[len(c)-1]), ']')
    
 def show(f,pretty):
   for c in f:
-    if pretty: prettyClause(c)
-    else:       plainClause(c)
+    prettyClause(c) if pretty else plainClause(c)
