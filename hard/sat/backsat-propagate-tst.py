@@ -24,21 +24,11 @@ def showfa(f, a):
   else:
     print('unsatisfiable, last a:', a)
 
-def literal_index(t):
-  return abs(t) - 1
-
 def sat(f):
   return not f #  True iff  f is empty list
 
 def unsat(a):
   return not a # True iff a is empty string
-
-def resolved(f, a): # satisfied if f empty, unsatisfied if a empty
-  return not f or not a
-
-"""
-warning: changes formula f
-"""
 
 def fix_literal(t, f, a): # in f, set literal t True, return updated a
   print('fix', t, end=' ')
@@ -67,52 +57,28 @@ def fix_and_propagate(t, f, a):  # set literal t and propagate
     return fix_and_propagate(f[t][0], f, a)
   return a
 
-def mycopy(f, a):
-  newf = []
-  for clause in f: 
-    newf.append(list(clause))
-  return newf, a
-
-def ind_short(f):
-  return f.index(min(f, key=len)) # index of clause with fewest literals
-
-def backsat(f, a):
-  if resolved(f, a):
-    return a
-  while True:
-    ndx = ind_short(f)
-    lenj = len(f[ndx])
-    if lenj==0:
-      return ''
-    elif lenj==1: 
-      a = fix_and_propagate(f[ndx][0], f, a)
-    else:
-      break
-  #split: 2 possible bool. vals for literal f[ndx][0]
-  fcopy, acopy = mycopy(f, a)
-  ndx = ind_short(f)
-  a = fix_and_propagate(f[ind_short(f)][0], f, a) 
-  a = backsat(f, a)
-  if a:
-    return a
-  # f was unsatisfiable, try fcopy
-  f, a = fcopy, acopy
-  ndx = ind_short(f)
-  a = fix_and_propagate(-f[ndx][0], f, a)
-  return backsat(f, a)
-
-def backsolve(n, myf):
-  asn = UNKNOWN * n
-  return backsat(myf,asn)
-
-n, k, m = 10, 3, 48 
+n, k, m = 5, 2, 12
 myf = formula(n, k, m)
 
-myf2 = deepcopy(myf)
+#myf = [
+#[1, 2],
+#[1, -2],
+#[-1, 3],
+#[-1, 5],
+#[-1, -5],
+#[2, -5],
+#[3, -4]
+#]
+
 print('formula with', n, 'vars', m, 'clauses')
 showf(myf)
-print('')
-print(backsolve(n, myf))
 
-print('\nverify with bfsolve')
-bfsolve(n, myf2, True)
+for j in range(1, n+1):
+  for t in [j, -j]:
+    a, f = UNKNOWN*m, deepcopy(myf)
+    print('\nstart', t, '  ', a)
+    showf(f)
+    a = fix_and_propagate(t, f, a)
+    print('\nfinished, a =', a)
+    showf(f)
+    
