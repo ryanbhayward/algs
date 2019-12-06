@@ -53,7 +53,7 @@ def fix_literal(t, f, a): # in f, set literal t True, return updated a
 
 def fix_and_propagate(t, f, a):  # set literal t and propagate
   a = fix_literal(t, f, a)
-  if unsat(a) or sat(f):
+  if resolved(f, a):
     return a
   t = f.index(min(f,key=len))  # clause with fewest literals
   #assert(len(f) > 0)
@@ -99,7 +99,7 @@ def backsolve(n, myf):
   asn = UNKNOWN * n
   return backsat(myf,asn)
 
-n, k, m = 20, 3, 84
+n, k, m = 25, 3, 105
 myf = formula(n, k, m)
 
 myf2 = deepcopy(myf)
@@ -108,5 +108,5 @@ showf(myf)
 print('')
 print(backsolve(n, myf))
 
-print('\nverify with bfsolve')
-bfsolve(n, myf2, False)
+#print('\nverify with bfsolve')
+#bfsolve(n, myf2, False)
