@@ -18,12 +18,6 @@ def showf(f):
   for j in f: 
     print(j)
 
-def showfa(f, a):
-  if not f:
-    print(a)
-  else:
-    print('unsatisfiable, last a:', a)
-
 def literal_index(t):
   return abs(t) - 1
 
@@ -62,7 +56,7 @@ def fix_and_propagate(t, f, a):  # set literal t and propagate
   if unsat(a) or sat(f):
     return a
   t = f.index(min(f,key=len))  # clause with fewest literals
-  assert(len(f) > 0)
+  #assert(len(f) > 0)
   if len(f[t])==1:
     return fix_and_propagate(f[t][0], f, a)
   return a
@@ -105,7 +99,7 @@ def backsolve(n, myf):
   asn = UNKNOWN * n
   return backsat(myf,asn)
 
-n, k, m = 10, 3, 48 
+n, k, m = 20, 3, 84
 myf = formula(n, k, m)
 
 myf2 = deepcopy(myf)
@@ -115,4 +109,4 @@ print('')
 print(backsolve(n, myf))
 
 print('\nverify with bfsolve')
-bfsolve(n, myf2, True)
+bfsolve(n, myf2, False)
