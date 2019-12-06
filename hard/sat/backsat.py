@@ -84,22 +84,35 @@ def backsat(f, a):
       break
   #split: 2 possible bool. vals for literal f[ndx][0]
   fcopy, acopy = mycopy(f, a)
-  ndx = ind_short(f)
   a = fix_and_propagate(f[ind_short(f)][0], f, a) 
   a = backsat(f, a)
   if a:
     return a
   # f was unsatisfiable, try fcopy
   f, a = fcopy, acopy
-  ndx = ind_short(f)
-  a = fix_and_propagate(-f[ndx][0], f, a)
+  a = fix_and_propagate(-f[ind_short(f)][0], f, a)
   return backsat(f, a)
+
+def satisfied(a): return a
+
+def bts(f, a):  # simple backtrack solver
+  if resolved(f, a): return a
+  #split: 2 possible bool. vals for literal f[ndx][0]
+  fcopy, acopy = mycopy(f, a)
+  a = fix_literal(f[ind_short(f)][0], f, a) 
+  a = bts(f, a)
+  if satisfied(a): return a
+  # f was unsatisfiable, try fcopy
+  f, a = fcopy, acopy
+  a = fix_literal(-f[ind_short(f)][0], f, a) 
+  return bts(f, a)
 
 def backsolve(n, myf):
   asn = UNKNOWN * n
-  return backsat(myf,asn)
+  #return backsat(myf,asn)
+  return bts(myf,asn)
 
-n, k, m = 25, 3, 105
+n, k, m = 10, 3, 42
 myf = formula(n, k, m)
 
 myf2 = deepcopy(myf)
@@ -108,5 +121,5 @@ showf(myf)
 print('')
 print(backsolve(n, myf))
 
-#print('\nverify with bfsolve')
-#bfsolve(n, myf2, False)
+print('\nverify with bfsolve')
+bfsolve(n, myf2, True)
