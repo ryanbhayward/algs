@@ -36,9 +36,9 @@ warning: changes formula f
 
 def fix_literal(t, f, a): # in f, set literal t True, return updated a
   print('fix', t, end=' ')
-  index = abs(t)-1
+  index = literal_index(t)
   if a[index] == (FALSE if (t>0) else TRUE): # contradiction, f unsatisfiable
-    print('   xxxxxx')
+    print('  *- contradiction -*')
     return ''
   a = a[:index] + (TRUE if (t>0) else FALSE) + a[index+1:]
   for c in f:
@@ -46,8 +46,8 @@ def fix_literal(t, f, a): # in f, set literal t True, return updated a
       f.remove(c)
     elif -t in c:
       c.remove(-t)
-      if len(c)==0:     # clause empty so f unsatisfiable
-        print('   y y y y')
+      if len(c)==0:     # empty clause so f unsatisfiable
+        print('  *- empty clause -*')
         return ''
   return a
 
