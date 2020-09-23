@@ -30,6 +30,11 @@ def pretty(S): # print sequence
   for j in S: print('{:2}'.format(j), end=' ')
   print (']')
 
+def mycopy(S):
+  T = []
+  for j in S: T.append(j)
+  return T
+
 def genseq(n):
   S = []
   for j in range(n): 
@@ -47,10 +52,9 @@ def bubbleup(S,j):
 # then S[0 .. j  ] satisifies heap property after  "
 # print('\nbubble from', j, end='')
   while j > 0:
-    pj = (j-1)//2
+    pj = (j-1)//2  # parent of j
     if S[pj] <= S[j]: break
     swapvals(S, j, pj)
-    #print('swap ', pj, j, end='')
     j = pj
 
 def trickledown(S,j):
@@ -63,7 +67,7 @@ def trickledown(S,j):
     left, right = 2*j+1, 2*j+2
     if left >= n: break # because j has no children
     best = left         # best child so far
-    if right < n and S[right] < S[left]: 
+    if right < n and S[right] < S[left]:  # short-circuit evaluation :)
       best = right      # new best child
     if S[j] <= S[best]: break # heap property restored
     swapvals(S, j, best)
@@ -72,18 +76,21 @@ def trickledown(S,j):
 def makeheap(S):
   for j in range(1,n):
     bubbleup(S,j)
+    #print('bubbleup', j, 'done')
+    #pretty(S)
 
 def makeheap2(S):
-  for j in range((n-1)//2, -1, -1):
+  for j in range((n-1)//2, -1, -1): # python, count down from floor (n-1)/2 to 0
     trickledown(S,j)
 
-n = 30
+n = 10
 S = genseq(n)
+#S = [5, 1, 3, 7, 8, 4, 9, 2, 6, 0]
+T = deepcopy(S)
 indices(n)
 pretty(S)
+pretty(T)
 for count in range(2):
-  T = deepcopy(S)
-  pretty(T)
   if count % 2 == 0: 
     makeheap(S)
     pretty(S)
