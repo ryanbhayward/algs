@@ -30,11 +30,6 @@ def pretty(S): # print sequence
   for j in S: print('{:2}'.format(j), end=' ')
   print (']')
 
-def mycopy(S):
-  T = []
-  for j in S: T.append(j)
-  return T
-
 def genseq(n):
   S = []
   for j in range(n): 
