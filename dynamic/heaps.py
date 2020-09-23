@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 '''
-simple heap operations: bubbleup, makeheap
+simple heap operations: bubbleup, trickledown, makeheap
 
 * binary tree rooted at element k satisifes min-heap property iff
   - element less than or equal to its left  child (if it has a left  child) and
@@ -18,11 +18,15 @@ simple heap operations: bubbleup, makeheap
 '''
 
 import random  
+from copy import deepcopy
 
-def pretty(S): # print indices and sequence
+def indices(n): # print indices
   print(' ', end=' ')
-  for j in range(len(S)): print('{:2}'.format(j), end=' ')
-  print ('\n[', end=' ')
+  for j in range(n): print('{:2}'.format(j), end=' ')
+  print('')
+
+def pretty(S): # print sequence
+  print ('[', end=' ')
   for j in S: print('{:2}'.format(j), end=' ')
   print (']')
 
@@ -41,20 +45,19 @@ def swapvals(S,j,k):
 def bubbleup(S,j):
 # if   S[0 .. j-1] satisifies heap property before execution, 
 # then S[0 .. j  ] satisifies heap property after  "
-  print('\nbubble from', j, end='')
+# print('\nbubble from', j, end='')
   while j > 0:
     pj = (j-1)//2
     if S[pj] <= S[j]: break
     swapvals(S, j, pj)
     #print('swap ', pj, j, end='')
     j = pj
-  print('')
 
 def trickledown(S,j):
 # for binary subtree T rooted at S[j], with left,right subtrees T_L, T_R
 # if  both T_L, T_R satisfy    heap property before execution,
 # then  T           satisifies heap property after  "
-  print('\ntrickle from', j, end='')
+# print('\ntrickle from', j, end='')
   n = len(S)
   while True: 
     left, right = 2*j+1, 2*j+2
@@ -65,7 +68,6 @@ def trickledown(S,j):
     if S[j] <= S[best]: break # heap property restored
     swapvals(S, j, best)
     j = best            # descend and repeat
-  print('')
 
 def makeheap(S):
   for j in range(1,n):
@@ -75,10 +77,16 @@ def makeheap2(S):
   for j in range((n-1)//2, -1, -1):
     trickledown(S,j)
 
-n = 20
+n = 30
+S = genseq(n)
+indices(n)
+pretty(S)
 for count in range(2):
-  S = genseq(n)
-  pretty(S)
-  if count % 2 == 0: makeheap(S)
-  else:              makeheap2(S)
-  pretty(S)
+  T = deepcopy(S)
+  pretty(T)
+  if count % 2 == 0: 
+    makeheap(S)
+    pretty(S)
+  else:              
+    makeheap2(T)
+    pretty(T)
