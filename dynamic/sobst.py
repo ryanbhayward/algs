@@ -1,6 +1,6 @@
-# simple optimal binary search tree
+#!/usr/local/bin/python3
+# simple optimal binary search tree     rbh 2019
 # simple means each gap probabilty is 0.0
-# RBH 2019
 
 import numpy as np
 from copy import deepcopy
@@ -17,9 +17,9 @@ def set_probs(P): # scale entries so sum is 1.0
     assert(P[j]) > 0
     P[j] = P[j] / s
   
-P = np.array([.3, .2, .05, .4, .05])
+#P = np.array([.3, .2, .05, .4, .05])
 #P = np.array([.5, .4, .3, .2, .1])
-#P = np.array([.1, .2, .3, .4, .5])
+P = np.array([.1, .2, .3, .4])
 #special(P)
 
 set_probs(P)
