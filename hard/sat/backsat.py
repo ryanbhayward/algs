@@ -1,5 +1,7 @@
 """ 
-simple backtracking sat solver   revised RBH 2019
+simple backtracking sat solver   revised RBH 2020
+  * Nectarios Chroniaris founded a bug, thank you
+  * Fatima Davelouis Gallardo helped finish this revision, thank you
 
 literals  x_1 ...  x_n represented by  1  2 ...  n
 literals -x_1 ... -x_n represented by -1 -2 ... -n
@@ -30,96 +32,67 @@ def unsat(a):
 def resolved(f, a): # satisfied if f empty, unsatisfied if a empty
   return not f or not a
 
-"""
-warning: changes formula f
-"""
-
-def fix_literal(t, f, a): # in f, set literal t True, return updated a
-  print('fix', t, end=' ')
+def fix_literal(t, f, a): # set literal t True, return updated f, a
+  print('fix', t, a)
   index = literal_index(t)
   if a[index] == (FALSE if (t>0) else TRUE): # contradiction, f unsatisfiable
     print('  *- contradiction -*')
-    return ''
+    return f, ''
   a = a[:index] + (TRUE if (t>0) else FALSE) + a[index+1:]
-  for c in f:
-    if t in c:
-      f.remove(c)
-    elif -t in c:
-      c.remove(-t)
-      if len(c)==0:     # empty clause so f unsatisfiable
-        print('  *- empty clause -*')
-        return ''
-  return a
-
-def fix_and_propagate(t, f, a):  # set literal t and propagate
-  a = fix_literal(t, f, a)
-  if resolved(f, a):
-    return a
-  t = f.index(min(f,key=len))  # clause with fewest literals
-  #assert(len(f) > 0)
-  if len(f[t])==1:
-    return fix_and_propagate(f[t][0], f, a)
-  return a
-
-def mycopy(f, a):
   newf = []
-  for clause in f: 
-    newf.append(list(clause))
+  for c in f:
+    if t not in c:
+      newc = deepcopy(c)
+      if -t in c:
+        newc.remove(-t)
+      if len(newc)==0:     # empty clause so f unsatisfiable
+        print('  *- empty clause -*')
+        return f, ''
+      newf.append(newc)
+  showf(newf)
+  print('fix end', a)
+  print('')
   return newf, a
 
 def ind_short(f):
   return f.index(min(f, key=len)) # index of clause with fewest literals
 
-def backsat(f, a):
-  if resolved(f, a):
-    return a
+def backsat(f, a): # simple iterative backtracking sat solver
+  print('backsat', f, a)
+  candidates = []  # list of partial solutions
   while True:
-    ndx = ind_short(f)
-    lenj = len(f[ndx])
-    if lenj==0:
-      return ''
-    elif lenj==1: 
-      a = fix_and_propagate(f[ndx][0], f, a)
-    else:
-      break
-  #split: 2 possible bool. vals for literal f[ndx][0]
-  fcopy, acopy = mycopy(f, a)
-  a = fix_and_propagate(f[ind_short(f)][0], f, a) 
-  a = backsat(f, a)
-  if a:
-    return a
-  # f was unsatisfiable, try fcopy
-  f, a = fcopy, acopy
-  a = fix_and_propagate(-f[ind_short(f)][0], f, a)
-  return backsat(f, a)
-
-def satisfied(a): return a
-
-def bts(f, a):  # simple backtrack solver
-  if resolved(f, a): return a
-  #split: 2 possible bool. vals for literal f[ndx][0]
-  fcopy, acopy = mycopy(f, a)
-  a = fix_literal(f[ind_short(f)][0], f, a) 
-  a = bts(f, a)
-  if satisfied(a): return a
-  # f was unsatisfiable, try fcopy
-  f, a = fcopy, acopy
-  a = fix_literal(-f[ind_short(f)][0], f, a) 
-  return bts(f, a)
-
+    print(len(candidates), 'other candidates')
+    if sat(f): # f empty list
+      print('found solution ', a)
+      return f, a
+    if unsat(a):  # a empty string
+      if len(candidates) > 0:
+        f, a = candidates.pop()
+      else: 
+        print('formula unsatisfiable')
+        return f,a # 
+    else: # f is not the empty list, a is not the empty string
+      ndx = ind_short(f)
+      lenj = len(f[ndx])
+      if lenj == 1: # fix literal
+        f, a = fix_literal(f[ndx][0], f, a)
+      elif lenj >= 2: #try both possible values
+        fcopy, acopy = deepcopy(f), a
+        f, a        = fix_literal( f[ndx][0], f, a)  # try now
+        newf, newa  = fix_literal(-fcopy[ndx][0], fcopy, acopy)
+        candidates.append((newf, newa))              # try later
+      
 def backsolve(n, myf):
   asn = UNKNOWN * n
-  #return backsat(myf,asn)
-  return bts(myf,asn)
+  backsat(myf, asn)
 
-n, k, m = 10, 3, 42
-myf = formula(n, k, m)
-
-myf2 = deepcopy(myf)
+n, k, m = 22, 3, 100
+f = formula(n, k, m)
+#f = [[1, 2, 3], [1, 2, -3], [1, 2, -4], [1, -2, 3], [1, -2, -4], [1, 3, 4], [1, 3, -4], [-1, 2, -3], [-1, 2, -4], [-1, -2, -3], [-1, -2, 4], [-1, -2, -4], [-1, 3, 4], [2, -3, -4], [-2, 3, 4], [-2, -3, -4]]
+f2 = deepcopy(f)
 print('formula with', n, 'vars', m, 'clauses')
-showf(myf)
 print('')
-print(backsolve(n, myf))
+backsolve(n, f)
 
 print('\nverify with bfsolve')
-bfsolve(n, myf2, True)
+bfsolve(n, f2, True)
