@@ -37,14 +37,14 @@ def initsubsets(n,m,a,b): # m subs of 0..n-1
   for _ in range(m): L.append(gensubset(a,b,n))
   complete(L,n)
   sumlen = 0
-  print('\n  ',end='')
+  print('\n   ',end='')
   for j in range(n):
     print('{0:2d}'.format(j), end='')
   print('')
   for j in range(len(L)):
     x = L[j]
     sumlen += len(x)
-    print(j, settostring(x,n))
+    print('S'+ str(j), settostring(x,n))
   print('\nuniverse { 0, 1, ...', n-1,'}')
   print('avg subset size', sumlen*1.0/m, '\n')
   return L
@@ -59,12 +59,12 @@ def bruteforce(n,m,L):
     # indexsets sorted by cardinality, so first found is min
     if len(subsetunion) == n: 
       #print('size', len(indexset), 'cover', indexset,'\n')
-      for j in indexset: print(j, settostring(L[j],n))
+      for j in indexset: print('S'+ str(j), settostring(L[j],n))
       return # so return once one is found
 
 #n,m,a,b = 40,25,2,11
-#n,m,a,b = 20,11,1,5
-n,m,a,b = 15,10,1,3
+n,m,a,b = 20,11,1,5
+#n,m,a,b = 15,10,1,3
 #n,m,a,b = 7,8,3,7
 L = initsubsets(n,m,a,b)
 bruteforce(n,m,L)
