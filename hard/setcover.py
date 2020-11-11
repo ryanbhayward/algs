@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 from random    import randint
 from itertools import chain, combinations
 
@@ -36,10 +37,16 @@ def initsubsets(n,m,a,b): # m subs of 0..n-1
   for _ in range(m): L.append(gensubset(a,b,n))
   complete(L,n)
   sumlen = 0
-  for x in L:
+  print('\n  ',end='')
+  for j in range(n):
+    print('{0:2d}'.format(j), end='')
+  print('')
+  for j in range(len(L)):
+    x = L[j]
     sumlen += len(x)
-    print settostring(x,n)
-  print 'universe size', n,' avg subset size', sumlen*1.0/m
+    print(j, settostring(x,n))
+  print('\nuniverse { 0, 1, ...', n-1,'}')
+  print('avg subset size', sumlen*1.0/m, '\n')
   return L
 
 def bruteforce(n,m,L):
@@ -51,8 +58,8 @@ def bruteforce(n,m,L):
       subsetunion |= L[t]
     # indexsets sorted by cardinality, so first found is min
     if len(subsetunion) == n: 
-      print 'size', len(indexset), 'cover', indexset
-      for j in indexset: print settostring(L[j],n)
+      #print('size', len(indexset), 'cover', indexset,'\n')
+      for j in indexset: print(j, settostring(L[j],n))
       return # so return once one is found
 
 #n,m,a,b = 40,25,2,11
