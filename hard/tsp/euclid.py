@@ -11,6 +11,8 @@
 from sys import stdin
 from math import sqrt
 
+myscale = 3.0
+
 def read_nodes():
   N = []
   for line in stdin:
@@ -29,12 +31,13 @@ def all_dist(N):
     print('  ' + N[j][0], end='')
   print('')
   for j in range(n-1):
-    print(N[j][0] + ':', end='  ')
+    print(N[j][0], j*'   ', end='  ')
     for k in range(j+1, n):
-      print('{:2d}'.format(dist(N[j][1], N[j][2], N[k][1], N[k][2], 9.0)), end=' ')
+      print('{:2d}'.format(dist(N[j][1], N[j][2], N[k][1], N[k][2], myscale)), end=' ')
     print('')
 
 N = read_nodes()
 for v in N:
-  print(v[0], v[1], v[2])
+  print('[', v[1], v[2], '('+v[0]+')]')
+print('')
 all_dist(N)
