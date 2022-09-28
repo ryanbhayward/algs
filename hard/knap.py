@@ -10,14 +10,14 @@ def genvector(n):
 
 def showRows(a,b,K,inf): # rows a .. b-1
   for w in range(a,b): #inf printed as '-'
-    print '%4d'%w,
+    print('%4d'%w, end='')
     for k in K[w]:
-      if k==inf: print '  -',
-      else: print '%4d'%k,
-    print ''
+      if k==inf: print('  -', end='')
+      else: print('%4d'%k, end='')
+    print('')
 
 def sack(n,W,K):  # given W, find 0/1 solution vector
-  inSolution = [0 for j in xrange(n)]
+  inSolution = [0 for j in range(n)]
   ndx,w  = n,W
   while (w>0) and (ndx>0):
     while (ndx>0) and (K[w][ndx]==K[w][ndx-1]):
@@ -37,14 +37,14 @@ def powerset(iterable):
 def knapBF(val,wt,W): # brute force knapsack
   indices = range(len(val)) # [0 1 .. n-1]
   bestVal = 0
-  print 'knapBF'
-  print 'subset    wt val   max wt',W
+  print('knapBF')
+  print('subset    wt val   max wt',W)
   for indexset in powerset(indices):
     v = sum( val[t] for t in indexset )
     w = sum(  wt[t] for t in indexset )
     if w <= W and v > bestVal: 
       bestVal = v
-      print indexset, w,v
+      print(indexset, w,v)
 
 def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
 # K[w][j]  will be best value knapsack, weight at most w, 
@@ -54,9 +54,9 @@ def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
 # eg. val[v], wt[t]  refer to t+1'st item
 #     also K[][t+1]  refers to t+1'st item
 #
-  print 'knapDP'
+  print('knapDP')
   n = len(val)
-  K = [[0 for j in xrange(n+1)] for w in xrange(W+1)]
+  K = [[0 for j in range(n+1)] for w in range(W+1)]
   for j in range(1,n+1):
     for w in range(W+1):
       K[w][j] = K[w][j-1] if w < wt[j-1] \
@@ -64,13 +64,13 @@ def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
   lastfew = 100  # show last few rows of computation
   showRows(max(W+1-lastfew,0),W+1,K,1+sum(wt)) # print last few rows of K
   solvec = sack(n,W,K)
-  print '\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val)),'\n'
+  print('\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val)),'\n')
     
 def knapDPV(val,wt,V): #dynamic programming by value
   # A[v][j] is min weight of subset of items 0..j with exact val v
   infinity = 1 + sum(val) #larger than any possible sum of values
   n = len(val)
-  A = [[infinity for j in xrange(n)] for v in xrange(V+1)]
+  A = [[infinity for j in range(n)] for v in range(V+1)]
   for j in range(n): A[0][j] = 0
   A[val[0]][0] = wt[0]  # end initialization
   for v in range(1,V+1):  # row    0 already initialized
@@ -85,8 +85,10 @@ W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
 #n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 8, 5]
 #n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
 #n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
-#n,W,val,wt = 4, 13, [6, 9, 8, 10], [5, 8, 6, 7]
+n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
 #knapBF(val,wt,W)
 knapDP(val,wt,W)
 #knapDPV(val,wt,sum(val))
-print 'val', val; print 'wt ', wt; print 'W ', W
+print('val', val)
+print('wt ', wt) 
+print('W ', W)
