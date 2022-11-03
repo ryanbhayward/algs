@@ -47,7 +47,7 @@ def knapBF(val,wt,W): # brute force knapsack
       print(indexset, w,v)
 
 def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
-# K[w][j]  will be best value knapsack, weight at most w, 
+# K[w][j]  will be max value knapsack, weight at most w, 
 #         using subset of { item_1, item_2, ..., item_j }
 # warning: K[][] needs an extra 0th column, so its indices
 #   are off-by-one w.r.t. val[], wt[]
