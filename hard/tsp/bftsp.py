@@ -24,7 +24,7 @@ def find_paths(node, cities, path, distance):
         global routes
         path.append(path[0])
         distance += cities[path[-2]][path[0]]
-        print (path, distance)
+        #print (path, distance)
         routes.append([distance, path])
         return
 
@@ -33,6 +33,30 @@ def find_paths(node, cities, path, distance):
         if (city not in path) and (node in cities[city]):
             find_paths(city, dict(cities), list(path), distance)
 
+def tri_eq(a,b,c):
+  return (a+b >= c) and (b+c >= a) and (c+a >= b)
+
+def tri_eq_check(D):
+  if len(D) < 3:
+    return True
+  towns = []
+  for j in D:
+    towns.append(j)
+  print(towns)
+  n = len(towns)
+  for j in range(n-2):
+    for k in range(j+1, n-1):
+      for m in range(k+1, n):
+        if not tri_eq(D[towns[j]][towns[k]], 
+                      D[towns[j]][towns[m]], 
+                      D[towns[k]][towns[m]]):
+          print('triangle equality violation')
+          print(towns[j], towns[k], towns[m], 
+                D[towns[j]][towns[k]], 
+                D[towns[j]][towns[m]], 
+                D[towns[k]][towns[m]])
+          assert(False)
+  print('triangle inequality ok')
 
 if __name__ == '__main__':
     cities = {
@@ -50,7 +74,7 @@ if __name__ == '__main__':
     }
 
     cities = init_distance_dict(False)  #not verbose
-
+    tri_eq_check(cities)
     print ("Start: A")
     find_paths('A', cities, [], 0)
     print ("\n")

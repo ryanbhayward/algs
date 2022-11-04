@@ -16,7 +16,6 @@ myscale = 3.0
 def read_nodes():
   N = []
   for line in stdin:
-    #node = line.strip()
     node = line.strip().split()
     N.append( (node[0], int(node[1]), int(node[2])) )
   return N
