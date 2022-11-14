@@ -8,11 +8,11 @@ def genvector(n):
   for j in range(n): v.append(randint(n,2*n))
   return v
 
-def showRows(a,b,K,inf): # rows a .. b-1
+def showRows(a, b, K, inf): # rows a .. b-1
   for w in range(a,b): #inf printed as '-'
     print('%4d'%w, end='')
     for k in K[w]:
-      if k==inf: print('  -', end='')
+      if k==inf: print('   -', end='')
       else: print('%4d'%k, end='')
     print('')
 
@@ -71,24 +71,30 @@ def knapDPV(val,wt,V): #dynamic programming by value
   infinity = 1 + sum(val) #larger than any possible sum of values
   n = len(val)
   A = [[infinity for j in range(n)] for v in range(V+1)]
-  for j in range(n): A[0][j] = 0
+  for j in range(n): 
+    A[0][j] = 0
   A[val[0]][0] = wt[0]  # end initialization
+  showRows(0, len(A), A, infinity)
+  print('start now')
+  
   for v in range(1,V+1):  # row    0 already initialized
     for j in range(1,n):  # column 0 "       "
       A[v][j] = A[v][j-1] if v < val[j] \
         else min(A[v][j-1], A[v - val[j]][j-1] + wt[j])
   showRows(0,len(A),A,infinity)
 
-n = 6
-W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
+#n = 6
+#W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
 #n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
 #n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 8, 5]
 #n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
 #n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
-n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
+#n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
+n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
 #knapBF(val,wt,W)
 knapDP(val,wt,W)
-#knapDPV(val,wt,sum(val))
+
+knapDPV(val,wt,sum(val))
 print('val', val)
 print('wt ', wt) 
 print('W ', W)
