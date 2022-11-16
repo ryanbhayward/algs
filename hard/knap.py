@@ -5,8 +5,17 @@ from itertools import chain, combinations
 
 def genvector(n):
   v = [] 
-  for j in range(n): v.append(randint(n,2*n))
+  for j in range(n): v.append(randint(3*n//2, 2*n))
   return v
+
+def showProblem(n, W, val, wt):
+  print('n', n, '  W', W, '\nweights ', end = '')
+  for j in range(n):
+    print('%4d'%wt[j], end = '')
+  print('\nvalues  ', end = '')
+  for j in range(n):
+    print('%4d'%val[j], end = '')
+  print('')
 
 def showRows(a, b, K, inf): # rows a .. b-1
   for w in range(a,b): #inf printed as '-'
@@ -34,17 +43,20 @@ def powerset(iterable):
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
-def knapBF(val,wt,W): # brute force knapsack
-  indices = range(len(val)) # [0 1 .. n-1]
+def knapBF(val, wt, W, verbose): # brute force knapsack
+  n = len(val)
+  showProblem(n, W, val, wt)
+  indices = range(n) # [0 1 .. n-1]
   bestVal = 0
-  print('knapBF')
-  print('subset    wt val   max wt',W)
+  if verbose:
+    print('knapBF')
+    print('subset    wt val   max wt',W)
   for indexset in powerset(indices):
     v = sum( val[t] for t in indexset )
     w = sum(  wt[t] for t in indexset )
     if w <= W and v > bestVal: 
       bestVal = v
-      print(indexset, w,v)
+      if verbose: print(indexset, w,v)
 
 def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
 # K[w][j]  will be max value knapsack, weight at most w, 
@@ -83,18 +95,18 @@ def knapDPV(val,wt,V): #dynamic programming by value
         else min(A[v][j-1], A[v - val[j]][j-1] + wt[j])
   showRows(0,len(A),A,infinity)
 
-#n = 6
-#W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
+n = 20
+W, val, wt = (n*n*3)//4, genvector(n), genvector(n)
 #n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
 #n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 8, 5]
 #n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
 #n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
 #n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
-n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
-#knapBF(val,wt,W)
-knapDP(val,wt,W)
+#n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
+knapBF(val, wt, W, True)
+#knapDP(val,wt,W)
 
-knapDPV(val,wt,sum(val))
-print('val', val)
-print('wt ', wt) 
-print('W ', W)
+#knapDPV(val,wt,sum(val))
+#print('val', val)
+#print('wt ', wt) 
+#print('W ', W)
