@@ -5,7 +5,8 @@ from itertools import chain, combinations
 
 def genvector(n):
   v = [] 
-  for j in range(n): v.append(randint(3*n//2, 2*n))
+  #for j in range(n): v.append(randint(3*n//2, 2*n))
+  for j in range(n): v.append(randint(3*n, 4*n))
   return v
 
 def showProblem(n, W, val, wt):
@@ -78,7 +79,7 @@ def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
   solvec = sack(n,W,K)
   print('\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val)),'\n')
     
-def knapDPV(val,wt,V,W): #dynamic programming by value
+def knapDPV(val,wt,V): #dynamic programming by value
   # A[v][j] is min weight of subset of items 0..j with exact val v
   infinity = 1 + sum(val) #larger than any possible sum of values
   n = len(val)
@@ -86,21 +87,14 @@ def knapDPV(val,wt,V,W): #dynamic programming by value
   for j in range(n): 
     A[0][j] = 0
   A[val[0]][0] = wt[0]  # end initialization
-  #showRows(0, len(A), A, infinity)
-  #print('start now')
+  showRows(0, len(A), A, infinity)
+  print('start now')
   
   for v in range(1,V+1):  # row    0 already initialized
     for j in range(1,n):  # column 0 "       "
       A[v][j] = A[v][j-1] if v < val[j] \
         else min(A[v][j-1], A[v - val[j]][j-1] + wt[j])
   showRows(0,len(A),A,infinity)
-  
-  bestval = 0
-  for v in range(1,V+1):
-    for j in range(1,n):
-      if A[v][j] <= W:
-        bestval = max(bestval, v)
-  print('bestval', bestval)
 
 n = 20
 W, val, wt = (n*n*3)//4, genvector(n), genvector(n)
@@ -110,8 +104,7 @@ W, val, wt = (n*n*3)//4, genvector(n), genvector(n)
 #n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
 #n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
 #n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
-
-knapBF(val, wt, W, True)
+knapBF(val, wt, W, False)
 #knapDP(val,wt,W)
 
 #knapDPV(val,wt,sum(val))
