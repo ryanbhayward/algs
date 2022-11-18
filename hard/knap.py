@@ -66,7 +66,7 @@ def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
   solvec = sack(n,W,K)
   print('\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val)),'\n')
     
-def knapDPV(val,wt,V): #dynamic programming by value
+def knapDPV(val,wt,V,W): #dynamic programming by value
   # A[v][j] is min weight of subset of items 0..j with exact val v
   infinity = 1 + sum(val) #larger than any possible sum of values
   n = len(val)
@@ -74,14 +74,21 @@ def knapDPV(val,wt,V): #dynamic programming by value
   for j in range(n): 
     A[0][j] = 0
   A[val[0]][0] = wt[0]  # end initialization
-  showRows(0, len(A), A, infinity)
-  print('start now')
+  #showRows(0, len(A), A, infinity)
+  #print('start now')
   
   for v in range(1,V+1):  # row    0 already initialized
     for j in range(1,n):  # column 0 "       "
       A[v][j] = A[v][j-1] if v < val[j] \
         else min(A[v][j-1], A[v - val[j]][j-1] + wt[j])
   showRows(0,len(A),A,infinity)
+  
+  bestval = 0
+  for v in range(1,V+1):
+    for j in range(1,n):
+      if A[v][j] <= W:
+        bestval = max(bestval, v)
+  print('bestval', bestval)
 
 #n = 6
 #W, val, wt = (n*n*3)/4, genvector(n), genvector(n)
@@ -90,11 +97,14 @@ def knapDPV(val,wt,V): #dynamic programming by value
 #n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
 #n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
 #n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
-n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
+#n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
+#n,W,val,wt =  6, 20, [4, 8, 10, 14, 18, 20], [3, 4, 5, 6, 7, 8]
 #knapBF(val,wt,W)
+#n,W,val,wt =  6, 20, [202, 404, 505, 707, 909, 1010], [3, 4, 5, 6, 7, 8]
+n,W,val,wt =  6, 20, [12, 24, 30, 42, 54, 60], [3, 4, 5, 6, 7, 8]
 knapDP(val,wt,W)
 
-knapDPV(val,wt,sum(val))
+knapDPV(val,wt,sum(val),W)
 print('val', val)
 print('wt ', wt) 
 print('W ', W)
