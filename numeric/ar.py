@@ -1,3 +1,6 @@
+# I can't remember what this is!
+# maybe computing square roots base 4?
+
 def basefour(n):
   L = []
   while n > 0: 
@@ -8,6 +11,7 @@ def basefour(n):
 def sqrt(n): 
   q,r = 0,0   # quotient remainder
   L = basefour(n)
+  print L
   for j in reversed(L): 
     q, v, r = 2*q, 4*q, 4*r + j #v: divisor
     if v+1 <= r: # set digit to 1
