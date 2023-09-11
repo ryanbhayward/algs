@@ -19,7 +19,25 @@ def show_both(L,M):
   for j in range(n):
     print(j, L[j], M[j])
 
-n = 5
+def prefers(L,x,y): # in L, is x preferred to y?
+  return (L.index(x) < L.index(y))
+
+def unstable_pair(A,B,e,f):# prefs, prefs, edge, edge
+  if prefers(A[e[0]],f[1],e[1]) and prefers(B[e[1]],f[0],e[0]):
+    print('unstable pair', e, f)
+    return True
+  return False
+
+def is_stable(A,B): # is (A,B) stable?
+  n = len(A)
+  for j in range(n-1):
+    for k in range(j+1,n):
+      if unstable_pair(A,B,(j,j),(k,k)):
+        return False
+  return True
+
+n = 4
 H = init_prefs(n)
 R = init_prefs(n)
 show_both(H,R)
+x = is_stable(H,R)
