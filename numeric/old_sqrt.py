@@ -21,9 +21,11 @@ def ossqrt(n):
     while ((s+digit+1)*(digit+1) <= r):
       digit += 1
     assert((0 <= digit) and (digit <= 9))
+    print(r, '=', s+digit, '*', digit, '+ ...')
     q, r = q + digit, r - (s+digit)*digit
   assert(q*q <= n and ((q+1)*(q+1)) > n)
   return q, r
 
 n = 1234981234120109871234
-print(n, ossqrt(n))
+q,r = ossqrt(n)
+print(n,'=',q,'*',q,'+',r)
