@@ -23,7 +23,8 @@ def prefers(L,x,y): # in L, is x preferred to y?
   return (L.index(x) < L.index(y))
 
 def unstable_pair(A,B,e,f):# prefs, prefs, edge, edge
-  if prefers(A[e[0]],f[1],e[1]) and prefers(B[e[1]],f[0],e[0]):
+  if (prefers(A[e[0]],f[1],e[1]) and prefers(B[e[1]],f[0],e[0])) or \
+     (prefers(A[f[0]],e[1],f[1]) and prefers(B[f[1]],e[0],f[0])):
     print('unstable pair', e, f)
     return True
   return False
@@ -36,7 +37,7 @@ def is_stable(A,B): # is (A,B) stable?
         return False
   return True
 
-n = 4
+n = 3
 H = init_prefs(n)
 R = init_prefs(n)
 show_both(H,R)
