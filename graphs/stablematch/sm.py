@@ -1,4 +1,5 @@
 #stable matching demo rbh 2023
+#todo: add propose/accept rounds
 from random import shuffle
 
 def init_prefs(n):
@@ -17,7 +18,7 @@ def show_both(L,M):
   n = len(L)
   assert(n==len(M))
   for j in range(n):
-    print(j, L[j], M[j])
+    print(j, ' ', L[j], ' ', M[j])
 
 def prefers(L,x,y): # in L, is x preferred to y?
   return (L.index(x) < L.index(y))
