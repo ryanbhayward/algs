@@ -1,8 +1,11 @@
-#stable matching demo rbh 2023
-#todo: add propose/accept rounds
-from random import shuffle
+#stable matching demo          rbh 2023
+#exhaustively find all stable matchings
+#todo: add polytime propose/reject algm
 
-def init_prefs(n):
+from random import shuffle
+from itertools import permutations
+
+def random_prefs(n):
   pref = list(range(n))
   L = []
   for _ in range(n):
@@ -17,7 +20,7 @@ def show_prefs(L):
 def show_both(L,M):
   n = len(L)
   assert(n==len(M))
-  print('both preference lists')
+  print('    preference lists')
   for j in range(n):
     print(j, ' ', L[j], ' ', M[j])
 
@@ -36,36 +39,50 @@ def unhappy_couple(A,B,m,minv,x,y):
   if y == m[x]: return False
   mx, my = m[x], minv[y] # mates of x and y
   if (prefers(A[x],y,mx) and prefers(B[y],x,my)):
-    print(x,y,',',end=' ')
     return True
   return False
 
-def is_stable(A,B,m): # prefs, prefs, matching m:A -> B
+def all_unhappy(A,B,m): # prefs, prefs, matching m:A -> B
+  U = []
   n, minv, unhappy = len(m), inverse_perm(m), False
-  print('unhappy couples:', end = ' ')
   for j in range(n):
     for k in range(n):
       if unhappy_couple(A,B,m,minv,j,k):
-        unhappy = True
+        U.append((j,k))
+  return U
+
+def all_stable_matchings(H,R):
+  show_both(H,R)
+  for m in list(permutations(range(len(H)))):
+    minv = inverse_perm(m)
+    U = all_unhappy(H,R,m)
+    print(m, end=' ')
+    if len(U)==0:
+      print('stable')
+    else:
+      print('unhappy', end='')
+      [print(u, end='') for u in U]
+      print('')
   print('')
-  return not unhappy
 
-n = 2
-H, R = init_prefs(n), init_prefs(n)
-show_both(H,R)
-m = list(range(n))
-
-n = 4
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
-m = [3,0,2,1]
-m = [2,1,0,3]
-m = [2,3,1,0]
-m = [2,3,0,1]
+all_stable_matchings(H,R)
 
-minv = inverse_perm(m)
-print('matching and inverse', m, minv)
-if is_stable(H,R,m):
-  print('stable')
-else:
-  print('unstable')
+H, R = [[0,1],[1,0]], [[1,0],[0,1]]
+all_stable_matchings(H,R)
+
+H, R = [[0,1],[1,0]], [[0,1],[1,0]]
+all_stable_matchings(H,R)
+
+H, R = [[0,1],[0,1]], [[0,1],[1,0]]
+all_stable_matchings(H,R)
+
+H, R = [[0,1],[0,1]], [[1,0],[0,1]]
+all_stable_matchings(H,R)
+
+H, R = [[0,1],[0,1]], [[1,0],[1,0]]
+all_stable_matchings(H,R)
+
+H, R = [[0,1],[0,1]], [[0,1],[0,1]]
+all_stable_matchings(H,R)
