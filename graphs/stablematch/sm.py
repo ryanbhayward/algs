@@ -46,6 +46,14 @@ def unhappy_couple(A,B,m,minv,x,y):
     return True
   return False
 
+def is_stable(A,B,m):
+  n, minv, unhappy = len(m), inverse_perm(m), False
+  for j in range(n):
+    for k in range(n):
+      if unhappy_couple(A,B,m,minv,j,k):
+        return False
+  return True
+
 def all_unhappy(A,B,m): # prefs, prefs, matching m:A -> B
   U = []
   n, minv, unhappy = len(m), inverse_perm(m), False
@@ -70,12 +78,12 @@ def all_stable_matchings(H,R):
   print('')
 
 def propose_reject(H,R):
-# P[j] is best-so-far (not yet rejected by) resident for hospital j
 # C[j] is preferred-list index of best-so-far resident for hostpital j
+# P[H[j][C[j]]] is best-so-far (not yet rejected by) resident for hospital j
 # F[k] is best-so-far (among proposals) hospital for resident k
 
   n = pref_system_size(H,R)
-  P, F = [None] * n, [None] * n
+  F = [None] * n
   C = [0 for j in range(n)]
   rejection = True
   while rejection:
@@ -89,13 +97,14 @@ def propose_reject(H,R):
         r_choice = F[h_choice] # F's current proposal
         if prefers(R[h_choice], j, r_choice):
           F[h_choice] = j
-          P[j] = h_choice
           j_reject = r_choice
         else:
           j_reject = j
         C[j_reject] += 1 # reject proposal from H[j_reject][C[j_reject]] 
         rejection = True     # one proposal will now be rejected
-  print(P, F)
+  P = [H[j][C[j]] for j in range(n)]
+  print(P,C,F)
+  return P
 
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
@@ -111,4 +120,16 @@ for R in ([[0,1],[1,0]],
 
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
-propose_reject(H,R)
+show_both(H,R)
+m = propose_reject(H,R)
+assert(is_stable(H,R,m))
+m = propose_reject(R,H)
+assert(is_stable(R,H,m))
+
+H = [[2,1,3,0], [0,3,1,2], [1,0,2,3], [3,0,2,1]]
+R = [[3,2,0,1], [1,3,0,2], [2,3,1,0], [2,0,1,3]]
+show_both(H,R)
+m = propose_reject(H,R)
+assert(is_stable(H,R,m))
+m = propose_reject(R,H)
+assert(is_stable(R,H,m))
