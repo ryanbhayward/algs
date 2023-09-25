@@ -70,10 +70,32 @@ def all_stable_matchings(H,R):
   print('')
 
 def propose_reject(H,R):
+# P[j] is best-so-far (not yet rejected by) resident for hospital j
+# C[j] is preferred-list index of best-so-far resident for hostpital j
+# F[k] is best-so-far (among proposals) hospital for resident k
+
   n = pref_system_size(H,R)
-  P = [H[j][0] for j in range(n)] # proposals
-  
-  print(P)
+  P, F = [None] * n, [None] * n
+  C = [0 for j in range(n)]
+  rejection = True
+  while rejection:
+    rejection = False
+    for j in range(n):
+      # make proposal
+      h_choice = H[j][C[j]]
+      if F[h_choice] == None:
+        F[h_choice] = j
+      elif F[h_choice] != j: # F has two proposals
+        r_choice = F[h_choice] # F's current proposal
+        if prefers(R[h_choice], j, r_choice):
+          F[h_choice] = j
+          P[j] = h_choice
+          j_reject = r_choice
+        else:
+          j_reject = j
+        C[j_reject] += 1 # reject proposal from H[j_reject][C[j_reject]] 
+        rejection = True     # one proposal will now be rejected
+  print(P, F)
 
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
@@ -90,6 +112,3 @@ for R in ([[0,1],[1,0]],
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
 propose_reject(H,R)
-
-
-
