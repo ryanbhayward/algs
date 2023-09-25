@@ -5,6 +5,11 @@
 from random import shuffle
 from itertools import permutations
 
+def pref_system_size(H,R):
+  n = len(H)
+  assert(n==len(R))
+  return n
+
 def random_prefs(n):
   pref = list(range(n))
   L = []
@@ -18,8 +23,7 @@ def show_prefs(L):
     print(j, L[j])
 
 def show_both(L,M):
-  n = len(L)
-  assert(n==len(M))
+  n = pref_system_size(L,M)
   print('    preference lists')
   for j in range(n):
     print(j, ' ', L[j], ' ', M[j])
@@ -65,24 +69,27 @@ def all_stable_matchings(H,R):
       print('')
   print('')
 
+def propose_reject(H,R):
+  n = pref_system_size(H,R)
+  P = [H[j][0] for j in range(n)] # proposals
+  
+  print(P)
+
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
 all_stable_matchings(H,R)
 
-H, R = [[0,1],[1,0]], [[1,0],[0,1]]
-all_stable_matchings(H,R)
+H = [[0,1],[1,0]]
+for R in ([[0,1],[1,0]],
+          [[0,1],[1,0]],
+          [[1,0],[0,1]],
+          [[1,0],[1,0]],
+          [[0,1],[0,1]]):
+  all_stable_matchings(H,R)
 
-H, R = [[0,1],[1,0]], [[0,1],[1,0]]
-all_stable_matchings(H,R)
+H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
+R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
+propose_reject(H,R)
 
-H, R = [[0,1],[0,1]], [[0,1],[1,0]]
-all_stable_matchings(H,R)
 
-H, R = [[0,1],[0,1]], [[1,0],[0,1]]
-all_stable_matchings(H,R)
 
-H, R = [[0,1],[0,1]], [[1,0],[1,0]]
-all_stable_matchings(H,R)
-
-H, R = [[0,1],[0,1]], [[0,1],[0,1]]
-all_stable_matchings(H,R)
