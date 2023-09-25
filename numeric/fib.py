@@ -59,7 +59,17 @@ def ifib_demo(c):
     print(j, x, t1, "s. rat. cur./prev", '**' if (t0==0) else t1/t0)
     x *= 2
 
+def itee(n):
+  if n<= 1: return 1
+  a, b = 1, 1
+  for _ in range(n-1):
+    a, b = b, 1 + a + b
+  return b
+
+for j in range(20):
+  print(ifib(j), itee(j), 2*ifib(j+1)-1)
+
 #fib_test(30)
 #fib_demo(35)
 #mfib_demo(9)
-ifib_demo(21)
+#ifib_demo(21)
