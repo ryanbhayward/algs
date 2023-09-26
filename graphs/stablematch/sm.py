@@ -5,11 +5,6 @@
 from random import shuffle
 from itertools import permutations
 
-def pref_system_size(H,R):
-  n = len(H)
-  assert(n==len(R))
-  return n
-
 def random_prefs(n):
   pref = list(range(n))
   L = []
@@ -17,6 +12,11 @@ def random_prefs(n):
     shuffle(pref)
     L.append(pref.copy())
   return L
+
+def pref_system_size(H,R):
+  n = len(H)
+  assert(n==len(R))
+  return n
 
 def show_prefs(L):
   for j in range(len(L)):
@@ -86,7 +86,9 @@ def propose_reject(H,R):
   F = [None] * n
   C = [0 for j in range(n)]
   rejection = True
+  rounds = 0
   while rejection:
+    rounds += 1
     rejection = False
     for j in range(n):
       # make proposal
@@ -103,8 +105,18 @@ def propose_reject(H,R):
         C[j_reject] += 1 # reject proposal from H[j_reject][C[j_reject]] 
         rejection = True     # one proposal will now be rejected
   P = [H[j][C[j]] for j in range(n)]
-  print(P,C,F)
+  print('j  P  C  F   ',rounds,'rounds')
+  [print(j, P[j], C[j], F[j], sep='  ') for j in range(n)]
   return P
+
+def propose_demo(H,R):
+  show_both(H,R)
+  print('\npropose_reject(H,R)')
+  m = propose_reject(H,R)
+  assert(is_stable(H,R,m))
+  print('\npropose_reject(R,H)')
+  m = propose_reject(R,H)
+  assert(is_stable(R,H,m))
 
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
@@ -112,7 +124,6 @@ all_stable_matchings(H,R)
 
 H = [[0,1],[1,0]]
 for R in ([[0,1],[1,0]],
-          [[0,1],[1,0]],
           [[1,0],[0,1]],
           [[1,0],[1,0]],
           [[0,1],[0,1]]):
@@ -120,16 +131,13 @@ for R in ([[0,1],[1,0]],
 
 H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
-show_both(H,R)
-m = propose_reject(H,R)
-assert(is_stable(H,R,m))
-m = propose_reject(R,H)
-assert(is_stable(R,H,m))
+propose_demo(H,R)
 
 H = [[2,1,3,0], [0,3,1,2], [1,0,2,3], [3,0,2,1]]
 R = [[3,2,0,1], [1,3,0,2], [2,3,1,0], [2,0,1,3]]
-show_both(H,R)
-m = propose_reject(H,R)
-assert(is_stable(H,R,m))
-m = propose_reject(R,H)
-assert(is_stable(R,H,m))
+propose_demo(H,R)
+
+n = 8
+H = random_prefs(n)
+R = random_prefs(n)
+propose_demo(H,R)
