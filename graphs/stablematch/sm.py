@@ -78,34 +78,33 @@ def all_stable_matchings(H,R):
   print('')
 
 def propose_reject(H,R):
-# C[j] is preferred-list index of best-so-far resident for hostpital j
-# P[H[j][C[j]]] is best-so-far (not yet rejected by) resident for hospital j
-# F[k] is best-so-far (among proposals) hospital for resident k
-
+# C[j]:       pref-list index           for hospital j
+# H[j][C[j]]: current proposed resident for hospital j
+# F[k]:       current maybe hospital    for resident k
   n = pref_system_size(H,R)
-  F = [None] * n
-  C = [0 for j in range(n)]
-  rejection = True
-  rounds = 0
+  F,C = [None] * n, [0 for j in range(n)]
+  rejection, rounds = True, 0
   while rejection:
-    rounds += 1
-    rejection = False
+    rejection, rounds = False, rounds + 1
+    print('     round', rounds)
     for j in range(n):
-      # make proposal
-      h_choice = H[j][C[j]]
-      if F[h_choice] == None:
+      h_choice = H[j][C[j]] # current H proposal
+      if F[h_choice] == None: # R has no proposals
         F[h_choice] = j
-      elif F[h_choice] != j: # F has two proposals
-        r_choice = F[h_choice] # F's current proposal
-        if prefers(R[h_choice], j, r_choice):
-          F[h_choice] = j
-          j_reject = r_choice
+        print(' ',j,' prop ',h_choice,': maybe',sep='')
+      elif F[h_choice] != j: # R has two proposals
+        r_maybe = F[h_choice] # R's current proposal
+        if prefers(R[h_choice], j, r_maybe):
+          r_reject, r_maybe = r_maybe, j
+          F[h_choice] = r_maybe
         else:
-          j_reject = j
-        C[j_reject] += 1 # reject proposal from H[j_reject][C[j_reject]] 
-        rejection = True     # one proposal will now be rejected
+          r_reject = j
+        print(' ',j,' prop ',h_choice,
+              ': pref ',r_maybe,', rej ', r_reject, sep='')
+        C[r_reject] += 1 # H[j_reject] consider next pref
+        rejection = True # a proposal was rejected
   P = [H[j][C[j]] for j in range(n)]
-  print('j  P  C  F   ',rounds,'rounds')
+  print('\nj  P  C  F   ',rounds,'rounds')
   [print(j, P[j], C[j], F[j], sep='  ') for j in range(n)]
   return P
 
@@ -118,26 +117,23 @@ def propose_demo(H,R):
   m = propose_reject(R,H)
   assert(is_stable(R,H,m))
 
-H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
-R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
-all_stable_matchings(H,R)
+def mydemo():
+#  H = [[0,1],[1,0]]
+#  for R in ([[0,1],[1,0]],
+#            [[1,0],[0,1]],
+#            [[1,0],[1,0]],
+#            [[0,1],[0,1]]):
+#    all_stable_matchings(H,R)
+#    propose_demo(H,R)
 
-H = [[0,1],[1,0]]
-for R in ([[0,1],[1,0]],
-          [[1,0],[0,1]],
-          [[1,0],[1,0]],
-          [[0,1],[0,1]]):
+  H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
+  R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
+#  R = [[3,2,0,1], [1,3,0,2], [2,3,1,0], [2,0,1,3]]
   all_stable_matchings(H,R)
+  propose_demo(H,R)
+#  n = 8
+#  H = random_prefs(n)
+#  R = random_prefs(n)
+#  propose_demo(H,R)
 
-H = [[2,1,3,0], [0,3,1,2], [0,1,2,3], [3,0,2,1]]
-R = [[3,2,0,1], [2,3,1,0], [2,0,1,3], [2,0,1,3]]
-propose_demo(H,R)
-
-H = [[2,1,3,0], [0,3,1,2], [1,0,2,3], [3,0,2,1]]
-R = [[3,2,0,1], [1,3,0,2], [2,3,1,0], [2,0,1,3]]
-propose_demo(H,R)
-
-n = 8
-H = random_prefs(n)
-R = random_prefs(n)
-propose_demo(H,R)
+mydemo()
