@@ -40,11 +40,11 @@ def samplegraph(n):
   G = {}
   for v in range(n):
     G.update({v:[]})
-  addclique(0,n/2,G)
-  addclique(n/2,n,G)
-  for j in range(n/2-1):
-    G[j].append(j+n/2)
-    G[j+n/2].append(j)
+  addclique(0,n//2,G)
+  addclique(n//2,n,G)
+  for j in range(n//2-1):
+    G[j].append(j+n//2)
+    G[j+n//2].append(j)
   return G
 
 def randomgraph(n):
@@ -87,9 +87,9 @@ def showgoodcuts(G,t,printEdges):
     if len(C) < bestcutsize: 
       bestcut = C
       bestcutsize = len(bestcut)
-      print 'try',j,': size',len(bestcut)
-      if printEdges: print bestcut
-  print ''
+      print('try',j,': size',len(bestcut))
+      if printEdges: print(bestcut)
+  print('')
 
 G = {0:[1,2,3],
      1:[0,2,3],
