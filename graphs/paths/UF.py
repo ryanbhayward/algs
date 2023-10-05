@@ -17,7 +17,9 @@ def findGP(x, parents): # find, gp compress
   return px
 
 def myunion(x,y,P): # simple union
-  rootx, rooty = myfind(x,P), myfind(y,P)
+  print('myunion',x,y,'P')
+  #rootx, rooty = myfind(x,P), myfind(y,P)
+  rootx, rooty = findGP(x,P), findGP(y,P)
   P[rootx] = rooty
 
 def unionBR(v,w,P,R): # union by rank
@@ -30,15 +32,9 @@ def unionBR(v,w,P,R): # union by rank
     P[rv] = rw
     R[rw] += 1
 
-#n = 16
-#P = []
-#for j in range(n):
-  #P.append(j)
-
-#print P
-#t = 2
-#while t <= n:
-  #print t
-  #for j in range(n/t):
-    #myunion(t*j, t*j+t/2,P) ; print P
-  #t *= 2
+n = 10
+P = [j for j in range(n)]
+print(P)
+for j in range(9):
+  myunion(j,j+1,P)
+  print(P)
