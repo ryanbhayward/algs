@@ -74,7 +74,7 @@ def knapDP(val,wt,W): #usual dyn. prog. knap, by weight
       K[w][j] = K[w][j-1] if w < wt[j-1] \
         else max(K[w][j-1], K[w-wt[j-1]][j-1] + val[j-1])
   lastfew = 100  # show last few rows of computation
-  showRows(max(W+1-lastfew,0),W+1,K,1+sum(wt)) # print last few rows of K
+  showRows(max(W+1-lastfew,0),W+1,K,1+sum(val)) # print last few rows of K
   solvec = sack(n,W,K)
   print('\n', sum(map(mul, solvec, wt)), solvec, sum(map(mul, solvec, val)),'\n')
     
@@ -86,8 +86,8 @@ def knapDPV(val,wt,V): #dynamic programming by value
   for j in range(n): 
     A[0][j] = 0
   A[val[0]][0] = wt[0]  # end initialization
-  showRows(0, len(A), A, infinity)
-  print('start now')
+  #showRows(0, len(A), A, infinity)
+  #print('start now')
   
   for v in range(1,V+1):  # row    0 already initialized
     for j in range(1,n):  # column 0 "       "
@@ -95,18 +95,17 @@ def knapDPV(val,wt,V): #dynamic programming by value
         else min(A[v][j-1], A[v - val[j]][j-1] + wt[j])
   showRows(0,len(A),A,infinity)
 
-n = 20
-W, val, wt = (n*n*3)//4, genvector(n), genvector(n)
+#n = 20
+#W, val, wt = (n*n*3)//4, genvector(n), genvector(n)
 #n,W,val,wt =  6, 27, [6, 9, 7, 9, 8, 7], [11, 6, 8, 10, 8, 9]
-#n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 10, 8, 5]
 #n,W,val,wt = 5, 18, [5, 8, 10, 7, 6], [4, 7, 9, 6, 5]
 #n,W,val,wt = 4, 13, [10, 9, 8, 6], [8, 7, 6, 5]
 #n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
 #n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
-knapBF(val, wt, W, True)
-#knapDP(val,wt,W)
-
-#knapDPV(val,wt,sum(val))
-#print('val', val)
-#print('wt ', wt) 
-#print('W ', W)
+#n,W,val,wt = 8, 30, [2,3,4,5,6,7,8,9], [9,8,7,6,5,4,3,4]
+#n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 9, 8, 5]
+n,W,val,wt = 5, 15, [6, 7, 10, 7, 8], [4, 3, 6, 5, 3]
+n,W,val,wt = 5, 18, [3, 4, 6, 5, 5], [4, 3, 6, 5, 3]
+#knapBF(val, wt, W, True)
+knapDP(val,wt,W)
+knapDPV(val,wt,sum(val))
