@@ -3,7 +3,7 @@ def dfs(G,v,seen,cmpt,c,S,phase):
   for nbr in sorted(G[v]):
     if not seen[nbr]: dfs(G,nbr,seen,cmpt,c,S,phase)
   if (phase==0): S.append(v) # append in postorder
-  print v,
+  print(v, end='')
 
 def transpose(G):
   T = {}
@@ -19,7 +19,7 @@ def scc(G):
   for v in sorted(T):
     if not seen[v]: 
       dfs(T,v,seen,cmpt,c,S,phase)
-  print ''
+  print('')
   showall(T,cmpt,S)
 
   phase,c = 1,0
@@ -28,18 +28,20 @@ def scc(G):
     v = S.pop()
     if not seen[v]:   
       c += 1
-      print 'scc',c,':',
+      print('scc',c,':',end='')
       dfs(G,v,seen,cmpt,c,S,phase)
-      print ''
-  print ''
+      print('')
+  print('')
   showall(G,cmpt,S)
 
 def showall(G,cmpt,S):
-  print '     ',
-  for v in sorted(G): print '%2s' % v,
-  print '\ncmpt ',
-  for v in sorted(G): print '%2s' % cmpt[v],
-  print '\nstack', S
+  print('     ',end='')
+  for v in sorted(G): 
+    print('%2s' % v, end='')
+  print('\ncmpt ', end='')
+  for v in sorted(G): 
+    print('%2s' % cmpt[v],end='')
+  print('\nstack', S)
   
 D = { 'A':['B'],
       'B':['C','E','F'],
