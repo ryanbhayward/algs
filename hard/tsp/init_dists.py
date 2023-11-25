@@ -38,3 +38,5 @@ def init_distance_dict(verbose):
       print('')
 
   return dist
+
+init_distance_dict(True)

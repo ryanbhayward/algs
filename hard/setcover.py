@@ -15,6 +15,14 @@ def settostring(s,n): # set as pretty binary string
     else:        x += ' -'
   return x
 
+def stringtoset(g,n):
+  s = set()
+  assert(n==len(g))
+  for j in range(n):
+    if g[j]=='*':
+      s.add(j)
+  return s
+
 def gensubset(a,b,n): # subset of 0..n-1, each with prob a/b
   s = set()
   for j in range(n): 
@@ -31,6 +39,11 @@ def complete(L,n): # ensure union of L covers {0 .. n-1}
       L[r].add(j)
       #print 'add',j,'to',r
 
+def mystr(j):
+  if j > 9:
+    return str(j)
+  return ' ' + str(j)
+
 def initsubsets(n,m,a,b): # m subs of 0..n-1
   # an element in a subset with probability a/b
   L = [] # list of subsets
@@ -44,7 +57,7 @@ def initsubsets(n,m,a,b): # m subs of 0..n-1
   for j in range(len(L)):
     x = L[j]
     sumlen += len(x)
-    print('S'+ str(j), settostring(x,n))
+    print('S'+ mystr(j), settostring(x,n))
   print('\nuniverse { 0, 1, ...', n-1,'}')
   print('avg subset size', sumlen*1.0/m, '\n')
   return L
@@ -59,12 +72,34 @@ def bruteforce(n,m,L):
     # indexsets sorted by cardinality, so first found is min
     if len(subsetunion) == n: 
       #print('size', len(indexset), 'cover', indexset,'\n')
-      for j in indexset: print('S'+ str(j), settostring(L[j],n))
+      for j in indexset: 
+        print('S' + mystr(j), settostring(L[j],n))
       return # so return once one is found
 
-#n,m,a,b = 40,25,2,11
-n,m,a,b = 20,11,1,5
-#n,m,a,b = 15,10,1,3
-#n,m,a,b = 7,8,3,7
+n,m,a,b = 20,15,1,5
 L = initsubsets(n,m,a,b)
+
+L, n = [], 20
+ss = [
+'**-*----------*---**',
+'-*--*---*------*----',
+'-----*---***-*-----*',
+'--*-*-*----***------',
+'--*-*--------*------',
+'---*--*---------*--*',
+'----**-*------*-----',
+'---*--------**-*--*-',
+'-*------*-------**--',
+'------*------------*',
+'-------*--------*--*',
+'---*-*----*----**---',
+'---*----*-*-------*-',
+'*----------*-----*--',
+'-----*------**-*----']
+for x in ss:
+  L.append(stringtoset(x,n))
+
+for myset in L:
+  print(settostring(myset,n))
+
 bruteforce(n,m,L)
