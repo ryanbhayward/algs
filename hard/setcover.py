@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 from random    import randint
 from itertools import chain, combinations
+from copy      import deepcopy
 
 def powerset(iterable):
 #https://docs.python.org/2/library/itertools.html#recipes
@@ -62,44 +63,64 @@ def initsubsets(n,m,a,b): # m subs of 0..n-1
   print('avg subset size', sumlen*1.0/m, '\n')
   return L
 
-def bruteforce(n,m,L):
-  indices = range(m) # [0 1 .. m-1]
+def greedy(n,m,L):
+  # L list of m sets, universe {0 1 .. n-1}
+  # return a greedy cover 
+  casi = set()   # cover as set of indices, initially {}
+  T = set(range(n))  # unsaturated elements
+  while True:
+    hits = [len(L[j].intersection(T)) for j in range(m)]
+    best_index = hits.index(max(hits))
+    casi.add(best_index)
+    T = T - L[best_index]
+    if T == set(): break
+  print('greedy cover')
+  for j in casi: 
+    print('S' + mystr(j), settostring(L[j],n))
+
+def bruteforce(n,m,L): 
+  # L list of m sets, universe {0 1 .. n-1}
+  set_indices = range(m) # [0 1 .. m-1]
   bestcover = ()
-  for indexset in powerset(indices):
+  for indexset in powerset(set_indices):
     subsetunion = set()
     for t in indexset: 
       subsetunion |= L[t]
     # indexsets sorted by cardinality, so first found is min
     if len(subsetunion) == n: 
       #print('size', len(indexset), 'cover', indexset,'\n')
+      print('min cover')
       for j in indexset: 
         print('S' + mystr(j), settostring(L[j],n))
       return # so return once one is found
 
-n,m,a,b = 20,15,1,5
+
+def example():
+  L, n = [], 20
+  ss = [
+       '**-*----------*---**',
+       '-*--*---*------*----',
+       '-----*---***-*-----*',
+       '--*-*-*----***------',
+       '--*-*--------*------',
+       '---*--*---------*--*',
+       '----**-*------*-----',
+       '---*--------**-*--*-',
+       '-*------*-------**--',
+       '------*------------*',
+       '-------*--------*--*',
+       '---*-*----*----**---',
+       '---*----*-*-------*-',
+       '*----------*-----*--',
+       '-----*------**-*----']
+  for x in ss:
+    L.append(stringtoset(x,n))
+  return L, n, len(L)
+
+n,m,a,b = 40,15,1,5
 L = initsubsets(n,m,a,b)
-
-L, n = [], 20
-ss = [
-'**-*----------*---**',
-'-*--*---*------*----',
-'-----*---***-*-----*',
-'--*-*-*----***------',
-'--*-*--------*------',
-'---*--*---------*--*',
-'----**-*------*-----',
-'---*--------**-*--*-',
-'-*------*-------**--',
-'------*------------*',
-'-------*--------*--*',
-'---*-*----*----**---',
-'---*----*-*-------*-',
-'*----------*-----*--',
-'-----*------**-*----']
-for x in ss:
-  L.append(stringtoset(x,n))
-
+#L,n,m = example()
 for myset in L:
   print(settostring(myset,n))
-
+greedy(n,m,L)
 bruteforce(n,m,L)
