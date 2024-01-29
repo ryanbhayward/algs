@@ -31,7 +31,7 @@ def kruskalDemo(G):
     #print a, ra, b, rb,
     if ra != rb:
       #print 'add edge',a,b,t[2]
-      print a,b,t[2]
+      print(a,b,t[2])
       UF.myunion(ra,rb,parent)
     #else: print 'reject  ',a,b
 

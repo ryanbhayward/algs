@@ -1,31 +1,35 @@
-# simple astar 
-import weight3
-def astar(G,source, target):
-  infinity = weight3.infinity(G)
-  dist, priority, heuristic, parent, fringe, done = {}, {}, {}, {}, [], []
-  for v in G:
-    dist[v], priority[v], parent[v] = infinity, infinity, -1
-  dist[source], priority[source], parent[source] = 0, 0, source
+# simple a-star 
+import weight3 # weighted graph input, IO
 
-  #nodes, hvals = ['A','B','C','Z'], [0, 20, 22, 0]
-  #              [  0, 26, 24, 22, 18,  7, 10, 0 ]
-  #              [  0, 26, 25, 20, 17,  7, 10, 0 ]
-  #              [  0, 26, 24, 22, 18,  7,  2, 0 ]
-  #              [  0, 26, 25, 22, 17,  7,  2, 0 ]
-  #              [  0, 26, 24, 22,  2,  7, 10, 0 ]
+# target     final destination
+# wuv        weight(u,v): roadmap distance of edge (u,v)
+# est_ttl    estimated total distance (dist-so-far + heuristic) to dest'n
+# hrstc      heuristic
+# dist[v]    dist-so-far from source to v
+#                 - at end, will be length of shortest-path-found
+#                   ... and if hrstc never overestimates distance,
+#                   dist will be true distance (length of shortest path)
+
+def astar(G,source, target):
+  infty = weight3.infinity(G)
+  dist, est_ttl, hrstc, parent, fringe, done = {}, {}, {}, {}, [], []
+  for v in G:
+    dist[v], est_ttl[v], parent[v] = infty, infty, -1
+  dist[source], est_ttl[source], parent[source] = 0, 0, source
+
   nodes, hvals = ['A','B','C','D','E','F','G','Z'],\
                  [  0, 26, 25, 22,  2,  7, 10, 0 ]
   assert len(nodes)==len(hvals)
-  for j in range(len(nodes)): heuristic[nodes[j]] = hvals[j]
-  for j in range(len(nodes)): print(nodes[j], heuristic[nodes[j]])
+  for j in range(len(nodes)): hrstc[nodes[j]] = hvals[j]
+  for j in range(len(nodes)): print(nodes[j], hrstc[nodes[j]])
 
   msg = '*'
   fringe.append(source)
   while len(fringe) > 0:
-    current = fringe.pop(weight3.indexOfMin(fringe, priority))
+    current = fringe.pop(weight3.indexOfMin(fringe, est_ttl))
     done.append(current)
-    print('current', current, 'priority', priority[current])
-    msg = msg + current + '*' + str(priority[current]) + '*'
+    print('current', current, 'est_ttl', est_ttl[current])
+    msg = msg + current + '*' + str(est_ttl[current]) + '*'
     if current == target: break
     for (v, wuv) in G[current]:
       if v not in done:
@@ -33,13 +37,12 @@ def astar(G,source, target):
         if new_v_dist < dist[v]:
           dist[v] = new_v_dist
           parent[v] = current
-          priority[v] = new_v_dist + heuristic[v]
+          est_ttl[v] = new_v_dist + hrstc[v]
           if v not in fringe: fringe.append(v)
 
   print(msg)
   print('')
 
-#G = weight3.G8
 G = weight3.G9
 print(G)
 astar(G,'A','Z')

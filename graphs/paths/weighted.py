@@ -16,19 +16,19 @@ def indexOfMin(L,C):
   return ndx
 
 def showAll(G,D,P):
-  print '\nprnt',
-  for v in sorted(G): print P[v],
-  print '\nnode',
-  for v in sorted(G): print v,
-  print '\ncost',
-  for v in sorted(G): print D[v],
-  print ''
+  print('\nprnt', end = '')
+  for v in sorted(G): print(P[v], end='')
+  print('\nnode', end='')
+  for v in sorted(G): print(v, end='')
+  print('\ncost', end='')
+  for v in sorted(G): print(D[v], end='')
+  print('')
 
 def showFringe(G,F,D,inf):
-  print '  fringe',
+  print('  fringe', end='')
   for v in sorted(F):
     if D[v]!=inf:
-      print v,D[v],' ',
+      print(v,D[v],' ', end='')
 
 def readWGraph():
   G = {}
@@ -43,10 +43,10 @@ def readWGraph():
   return G
 
 def showGraph(G):
-  print '{'
+  print('{')
   for node in sorted(G):
-    print '\''+node+'\':',G[node],','
-  print '}'
+    print('\''+node+'\':',G[node],',')
+  print('}')
 
 G = {'A': [['B',4],['C',2]],
      'B': [['C',3],['D',2],['E',3]],
