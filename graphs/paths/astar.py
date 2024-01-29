@@ -48,7 +48,7 @@ def astar(G,source, target):
   msg = '*'
   fringe.append(source)
   while len(fringe) > 0:
-    current = fringe.pop(weight3.indexOfMin(fringe, est_ttl))
+    current = fringe.pop(weight3.indexOfMin(fringe, priority))
     done.append(current)
     print('\n', current, 'done: dist-from-source', dist[current], 'est-total', priority[current], '\n')
     msg = msg + current + '*' + str(priority[current]) + '*'
@@ -59,7 +59,7 @@ def astar(G,source, target):
         if new_v_dist < dist[v]:
           dist[v] = new_v_dist
           parent[v] = current
-          est_ttl[v] = new_v_dist + hrstc[v]
+          priority[v] = new_v_dist + heuristic[v]
           if v not in fringe: fringe.append(v)
     show_nodes(n, nodes)
     show_heur(n, heuristic)
