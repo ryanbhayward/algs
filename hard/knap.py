@@ -88,6 +88,7 @@ def knapDPV(val,wt,V): #dynamic programming by value
   A[val[0]][0] = wt[0]  # end initialization
   #showRows(0, len(A), A, infinity)
   #print('start now')
+  print('values  ',val,'\nweights ',wt)
   
   for v in range(1,V+1):  # row    0 already initialized
     for j in range(1,n):  # column 0 "       "
@@ -103,9 +104,9 @@ def knapDPV(val,wt,V): #dynamic programming by value
 #n,W,val,wt = 4, 5, [3, 1, 2, 2], [2 , 1, 1, 3]
 #n,W,val,wt =  6, 20, [2, 4, 5, 7, 9, 10], [3, 4, 5, 6, 7, 8]
 #n,W,val,wt = 8, 30, [2,3,4,5,6,7,8,9], [9,8,7,6,5,4,3,4]
-#n,W,val,wt = 5, 23, [7, 6, 10, 6, 9], [5, 8, 9, 8, 5]
-n,W,val,wt = 5, 15, [6, 7, 10, 7, 8], [4, 3, 6, 5, 3]
-n,W,val,wt = 5, 18, [3, 4, 6, 5, 5], [4, 3, 6, 5, 3]
+n,W,val,wt = 5, 18, [3, 4, 6, 5, 3], [4, 3, 5, 6, 3]
+n,W,val,wt = 5, 18, [3, 4, 6, 5, 3], [4, 3, 5, 6, 1]
+n,W,val,wt = 5, 18, [3, 4, 6, 5, 3], [4, 3, 5, 6, 2]
 #knapBF(val, wt, W, True)
-knapDP(val,wt,W)
+#knapDP(val,wt,W)
 knapDPV(val,wt,sum(val))
