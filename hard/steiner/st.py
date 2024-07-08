@@ -27,6 +27,13 @@ def rst(T): # min wt rect steinter tree
   if n == 2 or n ==3:
     return thin + thick
   if n == 4:
+    # if only 1 node has x=minx,
+    #    change that nodes x-val to 2nd-min x,
+    #    return delta plus new call
+    # elsif x=maxx ...
+    # elsif y=miny ...
+    # elsif y=maxy ...
+    # else ...
     return thin + thin + thick
   else: assert False
 
