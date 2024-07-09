@@ -1,8 +1,7 @@
 # min weight rectilinear steiner tree    rbh 2024
 
-# started
-# correct if at most 4 terminals :)
-# todo: what if 5 or more terminals ?
+# working up to 4 terminals, woo hoo :)
+# todo: 5 or more 
 
 from operator import itemgetter as ig
 
