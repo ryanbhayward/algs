@@ -1,11 +1,10 @@
 # min weight rectilinear steiner tree    rbh 2024
 
 # started
-# correct if at most 3 terminals :)
-# todo: what if 4 or more terminals?
+# correct if at most 4 terminals :)
+# todo: what if 5 or more terminals ?
 
 from operator import itemgetter as ig
-
 
 def minmax(T): #min x-coord, min y, max x, max y
   return min(T, key=ig(0))[0],\
@@ -13,30 +12,65 @@ def minmax(T): #min x-coord, min y, max x, max y
          max(T, key=ig(0))[0],\
          max(T, key=ig(1))[1]
 
+def thinthick(T):
+  minx, miny, maxx, maxy = minmax(T)
+  return min(maxx - minx, maxy - miny), \
+         max(maxx - minx, maxy - miny)
+
+def showpairs(T):
+  for pair in T:
+    print(pair[0], pair[1], ' ', end='')
+  print()
+
 def report(T):
-  print('\n', T, '\n', minmax(T), sep='')
-  print(rst(T))
+  showpairs(T)
+  print(' ', rst(T))
 
 def rst(T): # min wt rect steinter tree
   n = len(T)
   if n == 1:
     return 0
-  minx, miny, maxx, maxy = minmax(T)
-  thin = min(miny - minx, maxy - maxx)
-  thick = max(miny - minx, maxy - maxx)
   if n == 2 or n ==3:
-    return thin + thick
+    return sum(thinthick(T))
   if n == 4:
-    # if only 1 node has x=minx,
-    #    change that nodes x-val to 2nd-min x,
-    #    return delta plus new call
-    # elsif x=maxx ...
-    # elsif y=miny ...
-    # elsif y=maxy ...
-    # else ...
-    return thin + thin + thick
+    xsorted = sorted(T, key=ig(0))
+    ysorted = sorted(T, key=ig(1))
+    #print('x sorted', xsorted)
+    #print('y sorted', ysorted)
+    if xsorted[0][0] != xsorted[1][0]:
+      xshift = xsorted[1][0] - xsorted[0][0]
+      xsorted[0][0] += xshift
+      print('  shift right', xshift)
+      return xshift + rst(xsorted)
+    elif xsorted[-1][0] != xsorted[-2][0]:
+      xshift = xsorted[-1][0] - xsorted[-2][0]
+      xsorted[-1][0] -= xshift
+      print('  shift left', -xshift)
+      return xshift + rst(xsorted)
+    elif ysorted[0][1] != ysorted[1][1]:
+      yshift = ysorted[1][1] - ysorted[0][1]
+      ysorted[0][1] += yshift
+      print('  shift up', yshift)
+      return yshift + rst(ysorted)
+    elif ysorted[-1][1] != ysorted[-2][1]:
+      yshift = ysorted[-1][1] - ysorted[-2][1]
+      ysorted[-1][1] -= yshift
+      print('  shift down', -yshift)
+      return yshift + rst(ysorted)
+    else:
+      thin, thick = thinthick(T)
+      return thin + thin + thick
   else: assert False
 
-T = ((0,5), (2,1), (4,7), (6,3))
+Tvals = [ [[6,3], [0,5], [2,1], [4,7]],
+          [[6,3]],
+          [[6,3], [0,5]],
+          [[6,3], [6,2]],
+          [[6,3], [0,3]],
+          [[6,3], [0,5], [2,1]],
+          [[0,0], [0,4], [3,0], [3,4]],
+          [[0,0], [4,0], [0,3], [4,3]] 
+        ]
 
-report(T)
+for T in Tvals:
+  report(T)
