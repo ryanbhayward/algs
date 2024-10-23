@@ -3,6 +3,13 @@
 # working up to 4 terminals, woo hoo :)
 # todo: 5 or more 
 # todo: drop down to 3 and implement full-check (no-term-is-cutpoint)
+#   conjecture: if no-term-is-cut and
+#     for bounding rectangle, 
+#       *each side has at least 2 terminals,
+#        then full caterpillar has straight spine
+#       *some side has only a terminal,
+#        then shift the terminal inside 1 unit (after adding the edge)
+#        I think this allows us to skip the bent-spine case
 
 from operator import itemgetter as ig
 
