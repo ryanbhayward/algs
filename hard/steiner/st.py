@@ -2,10 +2,13 @@
 
 # working up to 4 terminals, woo hoo :)
 # todo: 5 or more 
+# todo: drop down to 3 and implement full-check (no-term-is-cutpoint)
 
 from operator import itemgetter as ig
 
 def minmax(T): #min x-coord, min y, max x, max y
+  #print(T)
+  #print('ig(0)', min(T, key=ig(0)))
   return min(T, key=ig(0))[0],\
          min(T, key=ig(1))[1],\
          max(T, key=ig(0))[0],\
