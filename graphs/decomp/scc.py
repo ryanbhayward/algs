@@ -1,19 +1,24 @@
-def dfs(G,v,seen,cmpt,c,S,phase):
-  seen[v],cmpt[v] = True,c
+def dfs(G, v, seen, cmpt, c, S, phase):
+  seen[v], cmpt[v] = True, c
   for nbr in sorted(G[v]):
-    if not seen[nbr]: dfs(G,nbr,seen,cmpt,c,S,phase)
-  if (phase==0): S.append(v) # append in postorder
+    if not seen[nbr]: 
+      dfs(G,nbr,seen,cmpt,c,S,phase)
+  if (phase==0): 
+    S.append(v) # append in postorder
   print(v, end='')
 
 def transpose(G):
   T = {}
-  for v in G: T[v] = []
   for v in G: 
-    for w in G[v]: T[w].append(v)
+    T[v] = []
+  for v in G: 
+    for w in G[v]: 
+      T[w].append(v)
   return T
 
 def scc(G):
-  phase,seen,cmpt,c,S = 0,{},{},0,[]
+  print('')
+  phase, seen, cmpt, c, S = 0, {}, {}, 0, []
   for v in G: seen[v],cmpt[v] = False, 0
   T = transpose(G)
   for v in sorted(T):
@@ -52,6 +57,7 @@ D = { 'A':['B'],
       'G':['F'],
       'H':['D','G']
 }
+
 D0 = {'A':['F'],
       'B':['K'],
       'C':['G','H'],
@@ -110,6 +116,20 @@ D4 = {'A':['E'],
       'L':['K']
 }
 
+D5 = {'A':[],
+      'B':['F'],
+      'C':['B'],
+      'D':['G','J'],
+      'E':['H'],
+      'F':['C'],
+      'G':[],
+      'H':['E','K'],
+      'I':['D','K'],
+      'J':['I'],
+      'K':['L','E'],
+      'L':['H']
+}
+
 G = {'A':['F'],
      'B':['H'],
      'C':['B','F'],
@@ -119,4 +139,8 @@ G = {'A':['F'],
      'G':['E'],
      'H':['G'],
      'I':['A','G']}
-scc(D4)
+
+scc(D5)
+
+Dtran = transpose(D5)
+scc(Dtran)
