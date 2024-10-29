@@ -1,3 +1,5 @@
+# tidied rbh 2024
+
 def dfs(G, v, seen, cmpt, c, S, phase):
   seen[v], cmpt[v] = True, c
   for nbr in sorted(G[v]):
