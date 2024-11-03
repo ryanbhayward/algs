@@ -1,4 +1,5 @@
-# revised 2024
+# revised 2024 rbh, dfs now returns list of components
+#   so scc is just components of dfs of transpose
 
 def postorder(G, v, seen, L):
    seen[v] = True
