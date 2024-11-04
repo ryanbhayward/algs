@@ -58,13 +58,14 @@ def scc(D):
    sccs = dfs(D, PO)
    show(sccs)
 
-def scc2(D): # this doesn't always work: why?
+def scc2(D): # this doesn't always work: try it on D6
    PO = get_nodes(dfs(D, node_list(D)))
    sccs = dfs(D, PO)
    show(sccs)
 
 from graphs_input import D, D0, D1, D2, D3, D4, D5, D6, G
-for d in [D, D0, D1, D2, D3, D4, D5, D6, G]:
+#for d in [D, D0, D1, D2, D3, D4, D5, D6, G]:
+for d in [D6]:
   print('\nnext digraph')
   show_graph(d)
   scc(d)
