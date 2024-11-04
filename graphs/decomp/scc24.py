@@ -44,8 +44,8 @@ def show_graph(D):
       print(w, end=' ')
     print()
 
-def show(sccs):
-   print('\nstrongly connected components')
+def show(sccs, msg):
+   print('\n', msg)
    for component in sccs: 
      for node in component:
         print(node, end='')
@@ -56,12 +56,12 @@ def scc(D):
    PO = get_nodes(dfs(T, node_list(T)))
    PO.reverse()
    sccs = dfs(D, PO)
-   show(sccs)
+   show(sccs, 'strongly connected components')
 
 def scc2(D): # this doesn't always work: try it on D6
    PO = get_nodes(dfs(D, node_list(D)))
    sccs = dfs(D, PO)
-   show(sccs)
+   show(sccs, 'scc aggregates')
 
 from graphs_input import D, D0, D1, D2, D3, D4, D5, D6, G
 #for d in [D, D0, D1, D2, D3, D4, D5, D6, G]:
