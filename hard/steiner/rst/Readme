@@ -1,0 +1,5 @@
+rectiliniear steiner tree       rbh 2024
+
+Ganley and Cohoo 94 algorithm, modified slightly
+  * compute small problems exactly
+  * pick min-other to always go in C1
