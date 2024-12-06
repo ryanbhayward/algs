@@ -1,7 +1,6 @@
 # min weight rectilinear steiner tree    rbh 2024
 
 # working up to 4 terminals, woo hoo :)
-# todo: 5 or more 
 # todo: drop down to 3 and implement full-check (no-term-is-cutpoint)
 #   conjecture: if no-term-is-cut and
 #     for bounding rectangle, 
@@ -14,8 +13,6 @@
 from operator import itemgetter as ig
 
 def minmax(T): #min x-coord, min y, max x, max y
-  #print(T)
-  #print('ig(0)', min(T, key=ig(0)))
   return min(T, key=ig(0))[0],\
          min(T, key=ig(1))[1],\
          max(T, key=ig(0))[0],\
@@ -39,13 +36,11 @@ def rst(T): # min wt rect steinter tree
   n = len(T)
   if n == 1:
     return 0
-  if n == 2 or n ==3:
+  if n == 2 or n == 3:
     return sum(thinthick(T))
   if n == 4:
     xsorted = sorted(T, key=ig(0))
     ysorted = sorted(T, key=ig(1))
-    #print('x sorted', xsorted)
-    #print('y sorted', ysorted)
     if xsorted[0][0] != xsorted[1][0]:
       xshift = xsorted[1][0] - xsorted[0][0]
       xsorted[0][0] += xshift
