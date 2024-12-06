@@ -49,29 +49,37 @@ def rst(T): # min wt rect steinter tree
     if xsorted[0][0] != xsorted[1][0]:
       xshift = xsorted[1][0] - xsorted[0][0]
       xsorted[0][0] += xshift
-      print('  shift right', xshift)
+      print('  shift from left', xshift)
       return xshift + rst(xsorted)
     elif xsorted[-1][0] != xsorted[-2][0]:
       xshift = xsorted[-1][0] - xsorted[-2][0]
       xsorted[-1][0] -= xshift
-      print('  shift left', -xshift)
+      print('  shift from right', xshift)
       return xshift + rst(xsorted)
     elif ysorted[0][1] != ysorted[1][1]:
       yshift = ysorted[1][1] - ysorted[0][1]
       ysorted[0][1] += yshift
-      print('  shift up', yshift)
+      print('  shift from bottom', yshift)
       return yshift + rst(ysorted)
     elif ysorted[-1][1] != ysorted[-2][1]:
       yshift = ysorted[-1][1] - ysorted[-2][1]
       ysorted[-1][1] -= yshift
-      print('  shift down', -yshift)
+      print('  shift from top', yshift)
       return yshift + rst(ysorted)
     else:
       thin, thick = thinthick(T)
       return thin + thin + thick
   else: assert False
 
-Tvals = [ [[6,3], [0,5], [2,1], [4,7]],
+Tvals = [ 
+          [[0,0], [5,0], [0,4], [1,1]],
+          [[5,0], [0,0], [5,4], [4,1]],
+          [[0,0], [5,0], [0,4], [3,1]],
+          [[0,0], [5,0], [0,4], [1,3]],
+          [[0,0], [5,0], [0,4], [7,3]],
+          [[0,0], [5,0], [0,4], [3,7]],
+          [[3,6], [5,0], [1,2], [7,4]],
+          [[6,3], [0,5], [2,1], [4,7]],
           [[6,3]],
           [[6,3], [0,5]],
           [[6,3], [6,2]],
