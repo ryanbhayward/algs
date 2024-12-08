@@ -1,12 +1,8 @@
-# implementation of Ganley and Cohoon 94     rbh 2024
-# input: terminal nodes on rectilinear grid
-# input format: same as Zac's program,
+# Ganley and Cohoon 94 implementation    rbh 2024
+# input: pins (terminal nodes) on rectilinear grid
+#   format as per Zac's program
 # output: min cost of steiner tree
-
-# todo: also return edges (haha ... this will never happen :)
-# todo: caterpillar looks ok, now final loops :)
-
-# use Zac's program if you want to see a solution (not nec. this one)
+#         (todo someday: also return edges)
 
 from itertools import combinations
 from sys import stdin
@@ -14,8 +10,14 @@ from string import ascii_uppercase
 from operator import itemgetter as ig
 from copy import deepcopy
 
-def stringify(S): # characters to alphabetic string
-  return ''.join(sorted(S))
+def stringify(chset): # char set to alphabetic string
+  return ''.join(sorted(chset))
+
+def str2pins(ch, T, n): # character string to pins tuple
+  L = []
+  for x in ch:
+    L.append(tuple(T[ascii_uppercase.find(x)]))
+  return tuple(L)
 
 class RST: # simple RST class
   def __init__(self):
@@ -59,6 +61,10 @@ def pointInList(t, T): # true if t in T
 
 def report(T):
   showpoints(T)
+  if len(T) >= 3:
+    print('\ntuples')
+    for s in ['A', 'B', 'C', 'AB', 'AC', 'BC', 'ABC']:
+      print(str2pins(s, T, len(T)))
   mnx, mny, mxx, mxy = minmax(T)
   xspan, yspan = mxx - mnx, mxy - mny
   print('lower bound', xspan, "+", yspan, '=', xspan+yspan)
@@ -203,13 +209,14 @@ Tvals = [
           [[6,3], [6,2]],
           [[6,3], [0,3]],
           [[6,3], [0,5], [2,1]],
-          [[0,0], [0,4], [3,0], [3,4]],
+          [[3,4], [0,0], [0,4], [3,0]],
           [[0,0], [4,0], [0,3], [4,3]],
           [[0,1], [1,0], [2,3], [3,2]],
           [[0,0], [1,0], [2,0], [3,0]],
           [[0,0], [0,3], [0,2], [0,1]],
           [[0,1], [1,4], [2,0], [3,2]],
         ]
+
 
 for T in Tvals:
   print()
