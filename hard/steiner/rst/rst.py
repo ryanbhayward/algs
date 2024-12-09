@@ -15,7 +15,10 @@ from heapq import nlargest, nsmallest
 def stringify(subset): # index subset to alphabetic string
   return ''.join(sorted([ascii_uppercase[j] for j in subset]))
 
-def extract_subset(s, T): # index subset to sublist
+def extract_subtuple(s, T): # index subset to subtuple
+  return tuple([T[j] for j in s])
+
+def extract_subset(s, T): # index subset to subtuple
   return tuple([T[j] for j in s])
 
 def tuples2lists(T): # when we want a mutable copy of T
@@ -182,8 +185,14 @@ def caterpillar(K, verbose): #
       pright = side_points[1][0]
       cost = min(cost, cat_cost(pright, T, 0, ss))
     if verbose: print('cost so far', cost)
+  if verbose: print('caterpillar', cost)
   return cost
-      
+
+def partner(j, S): # smallest element in S not equal to j
+  if j == min(S): 
+    return nsmallest(2, S)[1] # 2nd smallest
+  return min(S)
+
 def fdp(K, verbose): # return min cost
   n = len(K) # n >= 2
   if n <= 4: 
@@ -192,25 +201,38 @@ def fdp(K, verbose): # return min cost
   pin_indices = set(range(n))
   Rvals = {} # dictionary of terminal subset costs
   for m in range(2, n+1):
+    print('m', m)
     L = combinations(pin_indices, m) #m-subsets of pin_Ind
-    for pin_sub in L:
-      T = extract_subset(pin_sub, K)
-      nameT = stringify(pin_sub) # more readable than T
+    for m_sub in L:
+      if verbose: print('m, m_sub', m, m_sub)
+      T = extract_subtuple(m_sub, K)
+      nameT = stringify(m_sub) # more readable than T
       if m <= 4: 
         Rvals[nameT] = rst234(T, False)
-      # m >= 5
-      Rvals[nameT] = caterpillar(T, True)
-  for k in Rvals:
-    print(k, Rvals[nameT])
+      else: # m >= 5
+        if verbose: cost = caterpillar(T, True)
+        cost = caterpillar(T, False)
+        for c in m_sub: # cutpoint
+          p = partner(c, m_sub)
+          if verbose: print('c, p, m_sub', c, p, m_sub)
+          Q = set(m_sub).difference({c}).difference({p})
+          for j in range(m - 2): # want all proper subsets S of Q
+            S = combinations(Q, j) # so S has from 0 to m-3 elements
+            for s in S:
+              v = set(s)
+              if verbose: print(set(m_sub), Q, v, c, p)
+              C1 = v.union({c}).union({p})
+              C2 = set(m_sub).difference(v).difference({p})
+              if verbose: print('C1, C2', C1, C2)
+              cost = min(cost, Rvals[stringify(C1)]+Rvals[stringify(C2)])
+        Rvals[nameT] = cost
+  if verbose:
+    for k in Rvals:
+      print(k, Rvals[k])
   return Rvals[stringify(pin_indices)]
 
 def report(T, verbose):
   print(len(T), ' terminals\n', T, sep='') 
-  #if len(T) >= 3:
-  #  if verbose: print('\ntuples')
-  #  for j in range(1,4):
-  #    for s in combinations(set(range(3)), j):
-  #      if verbose: print(extract_subset(s, T))
   mnx, mny, mxx, mxy = minmax(T)
   xspan, yspan = mxx - mnx, mxy - mny
   if verbose:
