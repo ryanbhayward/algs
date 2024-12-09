@@ -1,7 +1,7 @@
 # Ganley and Cohoon 94 FDP implementation    rbh 2024
 # input: pins (terminal nodes) on rectilinear grid
-#   format as per Zac's program
-# output: min cost of steiner tree
+#        (format as per Zac's program)
+# output: min cost of steiner tree 
 #         (todo someday: also return edges)
 
 from itertools import combinations
@@ -16,31 +16,42 @@ def stringify(subset): # index subset to alphabetic string
   return ''.join(sorted([ascii_uppercase[j] for j in subset]))
 
 def extract_subset(s, T): # index subset to sublist
-  return [T[j] for j in s]
+  return tuple([T[j] for j in s])
 
 def tuples2lists(T): # when we want a mutable copy of T
   return [list(point) for point in T]
 
-class Pins: # simple class of pins, a.k.a. terminal nodes
-  def __init__(self):
-    input_lines = []
-    for line in stdin:
-      input_lines.append(line.strip('\n'))
-    self.n = int(input_lines[0])  # Zac format: 1st line is n
-    input_lines = input_lines[1:]
-    assert(len(input_lines)==self.n)
-    self.coords = []
-    for j in range(self.n):
-      pair = input_lines[j].split()
-      self.coords.append((int(pair[0]), int(pair[1])))
-    self.coords = tuple(self.coords) # for safety, make this immutable
-    assert(self.n == len(self.coords))
+def read_pins(): # each pin is 2-tuple, i.e. (x, y)
+  input_lines = []
+  for line in stdin:
+    input_lines.append(line.strip('\n'))
+  n = int(input_lines[0])  # Zac format: 1st line is n
+  input_lines = input_lines[1:]
+  assert(len(input_lines)==n)
+  coords = []
+  for j in range(n):
+    pair = input_lines[j].split()
+    coords.append((int(pair[0]), int(pair[1])))
+  return tuple(sorted(coords)) # for safety, make this immutable
+
+#class Pins: # simple class of pins, a.k.a. terminal nodes
+#  def __init__(self):
+#    input_lines = []
+#    for line in stdin:
+#      input_lines.append(line.strip('\n'))
+#    self.n = int(input_lines[0])  # Zac format: 1st line is n
+#    input_lines = input_lines[1:]
+###    assert(len(input_lines)==self.n)
+#    self.coords = []
+#    for j in range(self.n):
+#      pair = input_lines[j].split()
+#      self.coords.append((int(pair[0]), int(pair[1])))
+#    self.coords = tuple(self.coords) # for safety, make this immutable
+#    assert(self.n == len(self.coords))
 
 def minmax(T): #min x-coord, min y, max x, max y
-  return min(T, key=ig(0))[0],\
-         min(T, key=ig(1))[1],\
-         max(T, key=ig(0))[0],\
-         max(T, key=ig(1))[1]
+  return min(T, key=ig(0))[0], min(T, key=ig(1))[1],\
+         max(T, key=ig(0))[0], max(T, key=ig(1))[1]
 
 def spans(T):
   minx, miny, maxx, maxy = minmax(T)
@@ -52,22 +63,7 @@ def pointInList(t, T): # True if t in T
       return True
   return False
 
-def report(T, verbose):
-  print(len(T), ' terminals\n', T, sep='') 
-  if len(T) >= 3:
-    if verbose: print('\ntuples')
-    for j in range(1,4):
-      for s in combinations(set(range(3)), j):
-        if verbose: print(extract_subset(s, T))
-  mnx, mny, mxx, mxy = minmax(T)
-  xspan, yspan = mxx - mnx, mxy - mny
-  if verbose:
-    print('lower bound', xspan, "+", yspan, '=', xspan+yspan)
-    print('fdp', fdp(T))
-    print(T)
-  print('caterpillar cost', caterpillar(T, verbose))
-
-def rst4(K, verbose): # |K|==4: return cost of min-cost rst
+def rst4(K, verbose): # min-cost rst when |K|==4
   if verbose: print('rst4', K)
   assert(4==len(K))
   T = tuples2lists(K)
@@ -108,7 +104,7 @@ def rst4(K, verbose): # |K|==4: return cost of min-cost rst
       return extras + xspan + yspan
     extras += yshift
     yspan  -= yshift
-    if verboase: print('extras, xspan, yspan', extras, xspan, yspan)
+    if verbose: print('extras, xspan, yspan', extras, xspan, yspan)
   return extras + xspan + yspan + min(xspan, yspan)
 
 def rst234(T, verbose):
@@ -116,27 +112,6 @@ def rst234(T, verbose):
   if len(T) < 4: 
     return sum(spans(T))
   return rst4(T, verbose)
-
-def fdp(K): # return min cost
-  n = len(K) # n >= 2
-  if n <= 4: return rst234(K, False)
-
-  # n >= 5: run Ganley Cohoon
-  Rvals = {} # dictionary of terminal subset costs
-  pin_Indices = set(range(n))
-  for m in range(2, n+1):
-    L = combinations(pin_Indices, m)
-    for pin_sub in L:
-      nameT = stringify(pin_sub)
-      #print(nameT)
-      T = extract_subset(pin_sub, K)
-      if m <= 4: 
-        Rvals[nameT] = rst234(T, False)
-      # m >= 5
-      #cost = caterpillar(T)
-      print(T)
-      Rvals[nameT] = caterpillar(T, True)
-  return Rvals[stringify(pin_Indices)]
 
 def cat_cost(t, T, ndx, span):
   return span[ndx] + sum([abs(q[1-ndx] - t[1-ndx]) for q in T])
@@ -209,30 +184,42 @@ def caterpillar(K, verbose): #
     if verbose: print('cost so far', cost)
   return cost
       
-P = Pins()
-report(P.coords, False)
+def fdp(K, verbose): # return min cost
+  n = len(K) # n >= 2
+  if n <= 4: 
+    return rst234(K, False)
+  # n >= 5 so run Ganley Cohoon
+  pin_indices = set(range(n))
+  Rvals = {} # dictionary of terminal subset costs
+  for m in range(2, n+1):
+    L = combinations(pin_indices, m) #m-subsets of pin_Ind
+    for pin_sub in L:
+      T = extract_subset(pin_sub, K)
+      nameT = stringify(pin_sub) # more readable than T
+      if m <= 4: 
+        Rvals[nameT] = rst234(T, False)
+      # m >= 5
+      Rvals[nameT] = caterpillar(T, True)
+  for k in Rvals:
+    print(k, Rvals[nameT])
+  return Rvals[stringify(pin_indices)]
 
-#for k in range(2, rst.n +1):
-  #print(rst.n)
-  #L = combinations(rst.pins,k)
-  #M = []
-  #for subset in L:
-    #M.append(stringify(subset))
-  #for subset in sorted(M):
-    #print(subset)
-
+def report(T, verbose):
+  print(len(T), ' terminals\n', T, sep='') 
+  #if len(T) >= 3:
+  #  if verbose: print('\ntuples')
+  #  for j in range(1,4):
+  #    for s in combinations(set(range(3)), j):
+  #      if verbose: print(extract_subset(s, T))
+  mnx, mny, mxx, mxy = minmax(T)
+  xspan, yspan = mxx - mnx, mxy - mny
+  if verbose:
+    print('lower bound', xspan, "+", yspan, '=', xspan+yspan)
+    print(T)
+  print('fdp cost', fdp(T, verbose))
 
 Tvals = [
-#          [[0,0], [5,0], [0,4], [1,2]],
-#          [[0,0], [5,0], [0,4], [2,1]],
-#          [[5,0], [0,0], [5,4], [4,1]],
-#          [[0,0], [5,0], [0,4], [3,1]],
-#          [[0,0], [5,0], [0,4], [1,3]],
-#          [[0,0], [5,0], [0,4], [7,3]],
-#          [[0,0], [5,0], [0,4], [3,7]],
-#          [[3,6], [5,0], [1,2], [7,4]],
-#          [[6,3], [0,5], [2,1], [4,7]],
-#         [[6,3]],
+          [[6,3]],
           [[6,3], [0,5]],
           [[6,3], [6,2]],
           [[6,3], [0,3]],
@@ -243,9 +230,18 @@ Tvals = [
           [[0,0], [1,0], [2,0], [3,0]],
           [[0,0], [0,3], [0,2], [0,1]],
           [[0,1], [1,4], [2,0], [3,2]],
+          [[0,0], [5,0], [0,4], [1,2]],
+          [[0,0], [5,0], [0,4], [2,1]],
+          [[5,0], [0,0], [5,4], [4,1]],
+          [[0,0], [5,0], [0,4], [3,1]],
+          [[0,0], [5,0], [0,4], [1,3]],
+          [[0,0], [5,0], [0,4], [7,3]],
+          [[0,0], [5,0], [0,4], [3,7]],
+          [[3,6], [5,0], [1,2], [7,4]],
+          [[6,3], [0,5], [2,1], [4,7]],
         ]
 
+P = read_pins()
+print('P', P)
+report(P, False)
 
-#for T in Tvals:
-#  print()
-#  report(T)
