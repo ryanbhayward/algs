@@ -26,13 +26,14 @@ class Pins: # simple class of pins, a.k.a. terminal nodes
     input_lines = []
     for line in stdin:
       input_lines.append(line.strip('\n'))
-    self.n = int(input_lines[0])
+    self.n = int(input_lines[0])  # Zac format: 1st line is n
     input_lines = input_lines[1:]
     assert(len(input_lines)==self.n)
     self.coords = []
     for j in range(self.n):
       pair = input_lines[j].split()
       self.coords.append((int(pair[0]), int(pair[1])))
+    self.coords = tuple(self.coords) # for safety, make this immutable
     assert(self.n == len(self.coords))
 
 def minmax(T): #min x-coord, min y, max x, max y
@@ -63,7 +64,8 @@ def report(T, verbose):
   if verbose:
     print('lower bound', xspan, "+", yspan, '=', xspan+yspan)
     print('fdp', fdp(T))
-    print('caterpillar', caterpillar(T, verbose))
+    print(T)
+  print('caterpillar cost', caterpillar(T, verbose))
 
 def rst4(K, verbose): # |K|==4: return cost of min-cost rst
   if verbose: print('rst4', K)
@@ -132,6 +134,7 @@ def fdp(K): # return min cost
         Rvals[nameT] = rst234(T, False)
       # m >= 5
       #cost = caterpillar(T)
+      print(T)
       Rvals[nameT] = caterpillar(T, True)
   return Rvals[stringify(pin_Indices)]
 
@@ -154,31 +157,29 @@ def caterpillar(K, verbose): #
   # bounding rectangle now has positive volume
 
   cost = float('inf')
-  #V = tuples2lists(K) # another copy for vertical check
-  
-  H = deepcopy(K) # use to check for horizontal (bent)spine
   V = flip(K) # use to check for vertical   (bent)spine
-  for T in [H, V]:
-    print(T)
+  for T in [K, V]:
+    if verbose: print(T)
     mnx, mny, mxx, mxy = minmax(T)
-    print(minmax(T))
+    if verbose: print(minmax(T))
     side_points = [[], []] # points on left and right sides of bound_rect
     ss = spans(T)
     for t in T:
       if   t[0] == mnx: side_points[0].append(t) # left side
       elif t[0] == mxx: side_points[1].append(t) # right 
-    print('left side points:', end ='')
-    for j in side_points[0]: print(j, end='')
-    print()
-    print('right side points:', end ='')
-    for j in side_points[1]: print(j, end='')
-    print()
+    if verbose: 
+      print('left side points:', end ='')
+      for j in side_points[0]: print(j, end='')
+      print()
+      print('right side points:', end ='')
+      for j in side_points[1]: print(j, end='')
+      print()
 
     if len(side_points[0]) == 1: # spine from left
       pleft = side_points[0][0]  # unique point on left side
       current = cat_cost(pleft, T, 0, ss)
       cost = min(cost, current)
-      print(cost)
+      if verbose: print(cost)
       if (len(side_points[1]) == 1 and 
           pleft[1] != side_points[1][0][1]): # bent spine check
         pright = side_points[1][0] # unique point on right side
@@ -194,14 +195,14 @@ def caterpillar(K, verbose): #
           x1, x2 = pright[0], points_high[0][0]
           if between(y0, y1, y2): 
             cost = min(cost, current - abs(y1 - y0))
-            print('between', y0, y1, y2, cost)
+            if verbose: print('between', y0, y1, y2, cost)
         if len(points_low) == 1:
           y0, y1, y2 = pright[1], pleft[1], points_low[0][1]
           x1, x2 = pleft[0], points_low[0][0]
           if between(y0, y1, y2): 
             current = cat_cost(pright, T, 0, ss)
             cost = min(cost, current - abs(y1 - y0))
-            print('between', y0, y1, y2, cost)
+            if verbose: print('between', y0, y1, y2, cost)
     if len(side_points[1]) == 1: # spine from right
       pright = side_points[1][0]
       cost = min(cost, cat_cost(pright, T, 0, ss))
@@ -209,7 +210,7 @@ def caterpillar(K, verbose): #
   return cost
       
 P = Pins()
-report(P.coords, True)
+report(P.coords, False)
 
 #for k in range(2, rst.n +1):
   #print(rst.n)
