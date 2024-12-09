@@ -12,6 +12,7 @@ from operator import itemgetter as ig
 from copy import deepcopy
 from math import prod
 from heapq import nlargest, nsmallest
+from time import time
 
 def stringify(subset): # index subset to alphabetic string
   return ''.join(sorted([ascii_uppercase[j] for j in subset]))
@@ -37,21 +38,6 @@ def read_pins(): # each pin is 2-tuple, i.e. (x, y)
     pair = input_lines[j].split()
     coords.append((int(pair[0]), int(pair[1])))
   return tuple(sorted(coords)) # for safety, make this immutable
-
-#class Pins: # simple class of pins, a.k.a. terminal nodes
-#  def __init__(self):
-#    input_lines = []
-#    for line in stdin:
-#      input_lines.append(line.strip('\n'))
-#    self.n = int(input_lines[0])  # Zac format: 1st line is n
-#    input_lines = input_lines[1:]
-###    assert(len(input_lines)==self.n)
-#    self.coords = []
-#    for j in range(self.n):
-#      pair = input_lines[j].split()
-#      self.coords.append((int(pair[0]), int(pair[1])))
-#    self.coords = tuple(self.coords) # for safety, make this immutable
-#    assert(self.n == len(self.coords))
 
 def minmax(T): #min x-coord, min y, max x, max y
   return min(T, key=ig(0))[0], min(T, key=ig(1))[1],\
@@ -230,16 +216,20 @@ def fdp(K, verbose): # return min cost
   if verbose:
     for k in Rvals:
       print(k, Rvals[k])
+  print('dictionary size', len(Rvals))
   return Rvals[stringify(pin_indices)]
 
 def report(T, verbose):
-  print(len(T), ' terminals\n', T, sep='') 
+  print(T, '\n', len(T), ' terminals', sep='') 
   mnx, mny, mxx, mxy = minmax(T)
   xspan, yspan = mxx - mnx, mxy - mny
   if verbose:
     print('lower bound', xspan, "+", yspan, '=', xspan+yspan)
     print(T)
-  print('fdp cost', fdp(T, verbose))
+  start_time = time()
+  cost = fdp(T, verbose)
+  print('elapsed time', format(time() - start_time, ".2f"))
+  print('min steiner tree cost', cost)
 
 Tvals = [
           [[6,3]],
@@ -265,6 +255,5 @@ Tvals = [
         ]
 
 P = read_pins()
-print('P', P)
 report(P, False)
 
