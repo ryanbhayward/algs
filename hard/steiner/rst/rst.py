@@ -3,6 +3,7 @@
 #        (format as per Zac's program)
 # output: min cost of steiner tree 
 #         (todo someday: also return edges)
+# todo: when whole-problem caterpillar solution, output caterpillar
 
 from itertools import combinations
 from sys import stdin
