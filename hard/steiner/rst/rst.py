@@ -213,9 +213,9 @@ def fdp(K, verbose): # return min cost
               if verbose: print('C1, C2', C1, C2)
               cost = min(cost, Rvals[stringify(C1)]+Rvals[stringify(C2)])
         Rvals[nameT] = cost
-  if verbose:
-    for k in Rvals:
-      print(k, Rvals[k])
+  #for k in Rvals:
+  #  print(k, Rvals[k], end=', ')
+  #print()
   print('dictionary size', len(Rvals))
   return Rvals[stringify(pin_indices)]
 
